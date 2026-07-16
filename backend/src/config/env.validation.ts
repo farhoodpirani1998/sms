@@ -79,6 +79,27 @@ class EnvironmentVariables {
   @IsOptional()
   @IsString()
   MEDIA_LOCAL_PATH?: string;
+
+  // CMS-B.3: only required when MEDIA_STORAGE_DRIVER=s3 — that
+  // conditional requirement is enforced in storage-provider.factory.ts
+  // (which throws a clear error at provider-construction time), not here
+  // with class-validator decorators, since these vars must NOT block
+  // boot for the (still-default) local driver.
+  @IsOptional()
+  @IsString()
+  MEDIA_S3_BUCKET?: string;
+
+  @IsOptional()
+  @IsString()
+  MEDIA_S3_REGION?: string;
+
+  @IsOptional()
+  @IsString()
+  MEDIA_S3_ACCESS_KEY_ID?: string;
+
+  @IsOptional()
+  @IsString()
+  MEDIA_S3_SECRET_ACCESS_KEY?: string;
 }
 
 // Minimum JWT_SECRET length enforced only in production — long enough to
