@@ -30,6 +30,9 @@
 //
 // FAQ (CMS-D.6) — same, for the sixth and last CMS-D content type. All
 // six simple content types now have an enum entry.
+//
+// SITE_SETTINGS (CMS-E.1) — first CMS-E entry, and the first singleton
+// content type (see that entity's doc comment for what that means).
 export enum CmsEntityType {
   MEDIA_ASSET = 'media_asset',
   PROOF_BLOCK = 'proof_block',
@@ -39,4 +42,5 @@ export enum CmsEntityType {
   STATISTIC = 'statistic',
   FEATURE = 'feature',
   FAQ = 'faq',
+  SITE_SETTINGS = 'site_settings',
 }

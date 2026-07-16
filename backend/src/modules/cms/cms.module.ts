@@ -11,6 +11,7 @@ import { CtaModule } from './content/cta/cta.module';
 import { StatisticsModule } from './content/statistics/statistics.module';
 import { FeaturesModule } from './content/features/features.module';
 import { FaqModule } from './content/faq/faq.module';
+import { SiteSettingsModule } from './content/site-settings/site-settings.module';
 
 /**
  * Aggregates every `core/*` and `content/*` CMS sub-module. Imported once
@@ -69,6 +70,13 @@ import { FaqModule } from './content/faq/faq.module';
  * simple content types (hero/about/cta/statistics/features/faq) are now
  * wired in. CMS-E (Site Settings + Navigation) can begin.
  *
+ * CMS-E.1 adds `SiteSettingsModule` (`content/site-settings/`) — the
+ * first CMS-E type and the first singleton content type: exactly one
+ * row per Site, enforced by a UNIQUE `site_id` constraint (this
+ * sub-phase's migration) plus `SiteSettingsService.getOrCreate()`.
+ * `NavigationModule` (CMS-E.2) shares that same migration's second
+ * table and is added here once it lands.
+ *
  * The rest of `core/*` (seo, i18n, public-api) and the remaining 12 real
  * `content/*` types land in later phases and get added to this `imports`
  * array as they're built — this module is intentionally left open for
@@ -94,6 +102,7 @@ import { FaqModule } from './content/faq/faq.module';
     StatisticsModule,
     FeaturesModule,
     FaqModule,
+    SiteSettingsModule,
   ],
 })
 export class CmsModule {}
