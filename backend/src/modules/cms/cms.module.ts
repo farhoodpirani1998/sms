@@ -8,6 +8,7 @@ import { ProofBlockModule } from './content/_proof/proof-block.module';
 import { HeroModule } from './content/hero/hero.module';
 import { AboutModule } from './content/about/about.module';
 import { CtaModule } from './content/cta/cta.module';
+import { StatisticsModule } from './content/statistics/statistics.module';
 
 /**
  * Aggregates every `core/*` and `content/*` CMS sub-module. Imported once
@@ -50,6 +51,11 @@ import { CtaModule } from './content/cta/cta.module';
  * the `cta_items` table — no `coverMediaId`/`MediaAsset` reference here,
  * since CTA has no image field (see that entity's doc comment).
  *
+ * CMS-D.4 adds `StatisticsModule` (`content/statistics/`), copying the
+ * same shape onto the `statistics` table — the first real (non-proof)
+ * content type exercising `OrderingService.reorder()` operationally,
+ * per the roadmap's D.4 note.
+ *
  * The rest of `core/*` (seo, i18n, public-api) and the remaining 12 real
  * `content/*` types land in later phases and get added to this `imports`
  * array as they're built — this module is intentionally left open for
@@ -72,6 +78,7 @@ import { CtaModule } from './content/cta/cta.module';
     HeroModule,
     AboutModule,
     CtaModule,
+    StatisticsModule,
   ],
 })
 export class CmsModule {}

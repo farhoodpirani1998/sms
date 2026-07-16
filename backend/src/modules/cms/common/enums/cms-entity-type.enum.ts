@@ -22,10 +22,14 @@
 // when its content type lands, nothing else about the enum changes.
 //
 // CTA (CMS-D.3) — same, one more entry for the third CMS-D content type.
+//
+// STATISTIC (CMS-D.4) — same, for the fourth CMS-D content type (the
+// first list type where reorder sees real operational use).
 export enum CmsEntityType {
   MEDIA_ASSET = 'media_asset',
   PROOF_BLOCK = 'proof_block',
   HERO = 'hero',
   ABOUT = 'about',
   CTA = 'cta',
+  STATISTIC = 'statistic',
 }
