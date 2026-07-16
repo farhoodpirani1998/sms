@@ -13,6 +13,7 @@ import { FeaturesModule } from './content/features/features.module';
 import { FaqModule } from './content/faq/faq.module';
 import { SiteSettingsModule } from './content/site-settings/site-settings.module';
 import { NavigationModule } from './content/navigation/navigation.module';
+import { PagesModule } from './content/pages/pages.module';
 
 /**
  * Aggregates every `core/*` and `content/*` CMS sub-module. Imported once
@@ -87,6 +88,15 @@ import { NavigationModule } from './content/navigation/navigation.module';
  * `BaseContentService`/`PublishingService`/`OrderingService` primitives.
  * This completes CMS-E. CMS-F (Pages) can begin.
  *
+ * CMS-F.1 adds `PagesModule` (`content/pages/`) — the first CMS-F type,
+ * and the first content type addressed by a public `slug` (unique per
+ * Site) rather than only an internal id. Otherwise follows the same
+ * `BaseContentService`/`PublishingService`/`OrderingService` shape as
+ * every prior type. `PagesPublicController` (by-slug lookup) and the
+ * shared `core/seo/` module (sitemap/robots) land in CMS-F.2, since they
+ * touch a `core/seo/` module other content types (News, CMS-G.2) will
+ * also plug into.
+ *
  * The rest of `core/*` (seo, i18n, public-api) and the remaining 12 real
  * `content/*` types land in later phases and get added to this `imports`
  * array as they're built — this module is intentionally left open for
@@ -114,6 +124,7 @@ import { NavigationModule } from './content/navigation/navigation.module';
     FaqModule,
     SiteSettingsModule,
     NavigationModule,
+    PagesModule,
   ],
 })
 export class CmsModule {}

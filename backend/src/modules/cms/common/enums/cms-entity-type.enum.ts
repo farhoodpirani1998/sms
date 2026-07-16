@@ -37,6 +37,9 @@
 // NAVIGATION_ITEM (CMS-E.2) — second and last CMS-E entry. A menu tree
 // row; self-referencing via parentId rather than a singleton, but still
 // one closed enum entry per table like every other content type.
+//
+// PAGE (CMS-F.1) — first CMS-F entry, and the first content type
+// addressed by a public `slug` rather than only an internal id.
 export enum CmsEntityType {
   MEDIA_ASSET = 'media_asset',
   PROOF_BLOCK = 'proof_block',
@@ -48,4 +51,5 @@ export enum CmsEntityType {
   FAQ = 'faq',
   SITE_SETTINGS = 'site_settings',
   NAVIGATION_ITEM = 'navigation_item',
+  PAGE = 'page',
 }
