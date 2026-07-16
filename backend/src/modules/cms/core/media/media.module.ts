@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { BullModule } from '@nestjs/bullmq';
 import { ConfigService } from '@nestjs/config';
 import { MediaAsset } from './entities/media-asset.entity';
 import { STORAGE_PROVIDER } from './storage/storage-provider.interface';
@@ -7,6 +8,8 @@ import { storageProviderFactory } from './storage/storage-provider.factory';
 import { MediaService } from './media.service';
 import { MediaController } from './media.controller';
 import { SiteModule } from '../site/site.module';
+import { MEDIA_PROCESSING_QUEUE, MediaProcessingQueue } from './media-processing.queue';
+import { MediaProcessingProcessor } from './media-processing.processor';
 
 /**
  * CMS-B.1 registered `MediaAsset` with TypeORM. CMS-B.2 hardcoded
@@ -22,9 +25,19 @@ import { SiteModule } from '../site/site.module';
  * "import SiteModule for its exported SiteService rather than
  * re-declaring a Site repository" shape later content modules will reuse
  * (see `SiteModule`'s own doc comment).
+ *
+ * CMS-B.5 (deferred/optional) registers the `media-processing` queue on
+ * the app's existing BullMQ connection (`BullModule.forRoot` in
+ * `app.module.ts` — no new connection here, same pattern as
+ * `NotificationsModule`) and provides `MediaProcessingQueue` +
+ * `MediaProcessingProcessor` for async thumbnailing.
  */
 @Module({
-  imports: [TypeOrmModule.forFeature([MediaAsset]), SiteModule],
+  imports: [
+    TypeOrmModule.forFeature([MediaAsset]),
+    SiteModule,
+    BullModule.registerQueue({ name: MEDIA_PROCESSING_QUEUE }),
+  ],
   controllers: [MediaController],
   providers: [
     {
@@ -33,6 +46,8 @@ import { SiteModule } from '../site/site.module';
       inject: [ConfigService],
     },
     MediaService,
+    MediaProcessingQueue,
+    MediaProcessingProcessor,
   ],
   exports: [STORAGE_PROVIDER, MediaService],
 })

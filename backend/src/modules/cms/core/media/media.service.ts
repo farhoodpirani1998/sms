@@ -7,12 +7,19 @@ import { MediaAsset } from './entities/media-asset.entity';
 import { STORAGE_PROVIDER, StorageProvider } from './storage/storage-provider.interface';
 import { SiteService } from '../site/site.service';
 import { UploadMediaDto } from './dto/upload-media.dto';
+import { MediaProcessingQueue } from './media-processing.queue';
 
 /**
  * `MediaService` — CMS-B.4. The only caller of `StorageProvider.write()`
  * in the whole module so far; every future content type that needs a
  * fresh upload (as opposed to just referencing an existing
  * `coverMediaId`) goes through this same path.
+ *
+ * CMS-B.5 (deferred/optional): after an image is stored, enqueues async
+ * thumbnail generation via `MediaProcessingQueue` — fire-and-forget, so
+ * a slow/failed thumbnail job never delays or fails the upload response
+ * itself. Non-image uploads (PDFs, etc.) are left alone; there's nothing
+ * to thumbnail.
  */
 @Injectable()
 export class MediaService {
@@ -22,6 +29,7 @@ export class MediaService {
     @Inject(STORAGE_PROVIDER)
     private readonly storageProvider: StorageProvider,
     private readonly siteService: SiteService,
+    private readonly mediaProcessingQueue: MediaProcessingQueue,
   ) {}
 
   /**
@@ -43,8 +51,9 @@ export class MediaService {
    * from a hostile filename; the original name is preserved separately
    * on the row for display purposes only.
    *
-   * `width`/`height` are left `null` — no image-dimension probing lands
-   * until thumbnailing (CMS-B.5, deferred/optional per the roadmap).
+   * `width`/`height` are left `null` here — image-dimension probing is
+   * async (CMS-B.5's `MediaProcessingProcessor` backfills them once the
+   * thumbnail job runs); this method itself never blocks on it.
    */
   async upload(
     file: Express.Multer.File | undefined,
@@ -74,6 +83,12 @@ export class MediaService {
       uploadedById,
     });
 
-    return this.mediaAssetRepository.save(asset);
+    const saved = await this.mediaAssetRepository.save(asset);
+
+    if (saved.mimeType.startsWith('image/')) {
+      await this.mediaProcessingQueue.enqueueThumbnailJob(saved.id);
+    }
+
+    return saved;
   }
 }
