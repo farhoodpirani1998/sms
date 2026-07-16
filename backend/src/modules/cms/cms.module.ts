@@ -10,6 +10,7 @@ import { AboutModule } from './content/about/about.module';
 import { CtaModule } from './content/cta/cta.module';
 import { StatisticsModule } from './content/statistics/statistics.module';
 import { FeaturesModule } from './content/features/features.module';
+import { FaqModule } from './content/faq/faq.module';
 
 /**
  * Aggregates every `core/*` and `content/*` CMS sub-module. Imported once
@@ -62,6 +63,12 @@ import { FeaturesModule } from './content/features/features.module';
  * here (third and last of the three CMS-D types with an image field,
  * per the migration's doc comment).
  *
+ * CMS-D.6 adds `FaqModule` (`content/faq/`), copying the same shape onto
+ * the `faqs` table — simplest of the six (just required `question`/
+ * `answer`, no scalar or media field). This completes CMS-D: all six
+ * simple content types (hero/about/cta/statistics/features/faq) are now
+ * wired in. CMS-E (Site Settings + Navigation) can begin.
+ *
  * The rest of `core/*` (seo, i18n, public-api) and the remaining 12 real
  * `content/*` types land in later phases and get added to this `imports`
  * array as they're built — this module is intentionally left open for
@@ -86,6 +93,7 @@ import { FeaturesModule } from './content/features/features.module';
     CtaModule,
     StatisticsModule,
     FeaturesModule,
+    FaqModule,
   ],
 })
 export class CmsModule {}

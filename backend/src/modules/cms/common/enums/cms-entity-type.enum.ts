@@ -27,6 +27,9 @@
 // first list type where reorder sees real operational use).
 //
 // FEATURE (CMS-D.5) — same, for the fifth CMS-D content type.
+//
+// FAQ (CMS-D.6) — same, for the sixth and last CMS-D content type. All
+// six simple content types now have an enum entry.
 export enum CmsEntityType {
   MEDIA_ASSET = 'media_asset',
   PROOF_BLOCK = 'proof_block',
@@ -35,4 +38,5 @@ export enum CmsEntityType {
   CTA = 'cta',
   STATISTIC = 'statistic',
   FEATURE = 'feature',
+  FAQ = 'faq',
 }
