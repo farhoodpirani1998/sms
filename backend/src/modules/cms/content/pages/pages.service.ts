@@ -10,24 +10,43 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Page } from './entities/page.entity';
 import { BaseContentService } from '../../common/services/base-content.service';
 import { CmsEntityType } from '../../common/enums/cms-entity-type.enum';
+import { ContentStatus } from '../../common/enums/content-status.enum';
 import { RevisionsService } from '../../core/revisions/revisions.service';
 import { PublishingService } from '../../core/publishing/publishing.service';
 import { OrderingService } from '../../core/ordering/ordering.service';
+import { LocaleResolverService } from '../../common/services/locale-resolver.service';
+import { SiteService } from '../../core/site/site.service';
+import { ResolvedSeoMeta } from '../../core/seo/seo-meta.type';
+
+/** Public-facing shape — localized fields resolved, SEO resolved with Site-level fallback. */
+export interface PublicPage {
+  id: string;
+  slug: string;
+  title: string | null;
+  excerpt: string | null;
+  body: string | null;
+  seo: ResolvedSeoMeta;
+}
 
 /**
- * `PagesService` — CMS-F.1. Extends `BaseContentService` for the same
- * create/findAll/findOne/update/remove/applyStatusTransition primitives
- * every content type gets, plus one thing no CMS-D/E type needed: slug
- * uniqueness. The DB's `UNIQUE (site_id, slug)` constraint (this
- * sub-phase's migration) is the actual enforcement point; `create()`/
+ * `PagesService` — CMS-F.1/F.2. Extends `BaseContentService` for the
+ * same create/findAll/findOne/update/remove/applyStatusTransition
+ * primitives every content type gets, plus one thing no CMS-D/E type
+ * needed: slug uniqueness. The DB's `UNIQUE (site_id, slug)` constraint
+ * (CMS-F.1's migration) is the actual enforcement point; `create()`/
  * `update()` here re-check first so a duplicate slug surfaces as a
  * clear `ConflictException` rather than a raw Postgres error bubbling
  * up through `save()`.
  *
  * Same `publish`/`unpublish`/`schedule`/`reorder`/`restore` wrappers and
  * `onModuleInit()` self-registration with `PublishingService` as every
- * other content type — public by-slug lookup (`findPublishedBySlug`)
- * and the shared `core/seo/` module land in CMS-F.2.
+ * other content type. `findPublishedBySlug()` (CMS-F.2) is the public
+ * by-slug read: resolves `title`/`excerpt`/`body` via
+ * `LocaleResolverService` same as every other public read, then builds
+ * `ResolvedSeoMeta` — `metaTitle`/`metaDescription` fall back to the
+ * page's own `title` and to `Site.seoDefaults` (CMS-A.2) in that order
+ * when a Page has no SEO fields of its own, and `canonicalUrl` is
+ * always built from `Site.domain` + the Page's `slug`.
  */
 @Injectable()
 export class PagesService extends BaseContentService<Page> implements OnModuleInit {
@@ -38,6 +57,8 @@ export class PagesService extends BaseContentService<Page> implements OnModuleIn
     events: EventEmitter2,
     private readonly publishingService: PublishingService,
     private readonly orderingService: OrderingService,
+    private readonly localeResolverService: LocaleResolverService,
+    private readonly siteService: SiteService,
   ) {
     super(repository, CmsEntityType.PAGE, revisionsService, events);
   }
@@ -130,5 +151,70 @@ export class PagesService extends BaseContentService<Page> implements OnModuleIn
       } as DeepPartial<Page>,
       userId,
     );
+  }
+
+  /**
+   * `GET /cms/public/pages/:slug` — resolves the published Page at
+   * `slug` for this Site, locale-resolved, with `ResolvedSeoMeta` built
+   * from the Page's own SEO fields, falling back to its `title` and
+   * then to `Site.seoDefaults` for anything left unset.
+   */
+  async findPublishedBySlug(
+    siteId: string,
+    slug: string,
+    requestedLocale?: string,
+  ): Promise<PublicPage | null> {
+    const page = await this.repository.findOne({
+      where: { siteId, slug, status: ContentStatus.PUBLISHED } as any,
+      relations: ['ogImageMedia'],
+    });
+
+    if (!page) {
+      return null;
+    }
+
+    const site = await this.siteService.findOne(siteId);
+    const locale = await this.localeResolverService.resolve(siteId, requestedLocale);
+    const defaultLocale = await this.localeResolverService.resolve(siteId);
+
+    const title = this.localeResolverService.resolveText(page.title, locale, defaultLocale);
+    const excerpt = this.localeResolverService.resolveText(page.excerpt, locale, defaultLocale);
+    const body = this.localeResolverService.resolveText(page.body, locale, defaultLocale);
+
+    const seoTitle =
+      this.localeResolverService.resolveText(page.metaTitle, locale, defaultLocale) ??
+      title ??
+      this.resolveSiteSeoText(site.seoDefaults?.title, locale, defaultLocale);
+
+    const seoDescription =
+      this.localeResolverService.resolveText(page.metaDescription, locale, defaultLocale) ??
+      this.resolveSiteSeoText(site.seoDefaults?.description, locale, defaultLocale);
+
+    const seo: ResolvedSeoMeta = {
+      title: seoTitle ?? null,
+      description: seoDescription ?? null,
+      ogImageUrl: page.ogImageMedia?.url ?? null,
+      canonicalUrl: `https://${site.domain}/${page.slug}`,
+    };
+
+    return {
+      id: page.id,
+      slug: page.slug,
+      title,
+      excerpt,
+      body,
+      seo,
+    };
+  }
+
+  private resolveSiteSeoText(
+    localized: Record<string, string> | undefined,
+    locale: string,
+    defaultLocale: string,
+  ): string | null {
+    if (!localized) {
+      return null;
+    }
+    return this.localeResolverService.resolveText(localized, locale, defaultLocale);
   }
 }

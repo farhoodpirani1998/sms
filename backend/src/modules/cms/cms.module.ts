@@ -14,6 +14,7 @@ import { FaqModule } from './content/faq/faq.module';
 import { SiteSettingsModule } from './content/site-settings/site-settings.module';
 import { NavigationModule } from './content/navigation/navigation.module';
 import { PagesModule } from './content/pages/pages.module';
+import { SeoModule } from './core/seo/seo.module';
 
 /**
  * Aggregates every `core/*` and `content/*` CMS sub-module. Imported once
@@ -92,10 +93,16 @@ import { PagesModule } from './content/pages/pages.module';
  * and the first content type addressed by a public `slug` (unique per
  * Site) rather than only an internal id. Otherwise follows the same
  * `BaseContentService`/`PublishingService`/`OrderingService` shape as
- * every prior type. `PagesPublicController` (by-slug lookup) and the
- * shared `core/seo/` module (sitemap/robots) land in CMS-F.2, since they
- * touch a `core/seo/` module other content types (News, CMS-G.2) will
- * also plug into.
+ * every prior type.
+ *
+ * CMS-F.2 adds `PagesPublicController` (by-slug lookup, wired into
+ * `PagesModule`) and `SeoModule` (`core/seo/`): `SitemapService`/
+ * `RobotsService` walk published Pages and render sitemap/robots
+ * bodies, exported for `SeoPublicController` (CMS-I.5) to expose as
+ * actual `GET /sitemap.xml`/`GET /robots.txt` routes once the
+ * Host-based Site-resolution guard (CMS-I.1) exists. This completes
+ * CMS-F; `core/seo/` is ready for News (CMS-G.2) to plug its own table
+ * into the same two services.
  *
  * The rest of `core/*` (seo, i18n, public-api) and the remaining 12 real
  * `content/*` types land in later phases and get added to this `imports`
@@ -125,6 +132,7 @@ import { PagesModule } from './content/pages/pages.module';
     SiteSettingsModule,
     NavigationModule,
     PagesModule,
+    SeoModule,
   ],
 })
 export class CmsModule {}
