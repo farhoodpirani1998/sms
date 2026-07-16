@@ -79,6 +79,14 @@ export function getDataSource(app: INestApplication): DataSource {
 export async function truncateAll(app: INestApplication): Promise<void> {
   const ds = getDataSource(app);
   const tables = [
+    // `cms` schema tables. Untouched by any e2e spec before CMS-B.4
+    // (CMS-A/B.1-B.3 only had unit specs), so they were never added
+    // here — first real need is the media-upload e2e spec, which
+    // creates Sites and MediaAssets that must not leak between tests.
+    // media_assets first: it FKs to sites, and CASCADE handles the
+    // rest, but explicit ordering keeps this list readable top-down.
+    'cms.media_assets',
+    'cms.sites',
     'audit_logs',
     'school_settings',
     'homework',

@@ -30,6 +30,7 @@ import {
 import { TimetableEntry, Weekday } from '../../src/modules/timetable/entities/timetable-entry.entity';
 import { Homework } from '../../src/modules/homework/entities/homework.entity';
 import { SchoolSettings } from '../../src/modules/school-settings/entities/school-settings.entity';
+import { Site } from '../../src/modules/cms/core/site/entities/site.entity';
 import { Role } from '../../src/common/authorization/roles.enum';
 import { getDataSource } from './test-app';
 
@@ -606,6 +607,25 @@ export async function createSchoolSettings(
     secondaryColor: overrides.secondaryColor ?? null,
   });
   return repo.save(settings);
+}
+
+// First factory used by a CMS e2e spec (CMS-B.4's media upload test).
+// `domain` is unique per Site (see Site entity), so it's randomized the
+// same way createSchool randomizes `name` -- callers that care about a
+// stable domain pass it via overrides.
+export async function createSite(app: INestApplication, overrides: Partial<Site> = {}): Promise<Site> {
+  const ds = getDataSource(app);
+  const repo = ds.getRepository(Site);
+  const site = repo.create({
+    name: overrides.name ?? `Test Site ${Date.now()}-${Math.random().toString(36).slice(2)}`,
+    domain: overrides.domain ?? `test-${Date.now()}-${Math.random().toString(36).slice(2)}.example.com`,
+    defaultLocale: overrides.defaultLocale ?? 'en',
+    supportedLocales: overrides.supportedLocales ?? ['en'],
+    theme: overrides.theme ?? null,
+    socialLinks: overrides.socialLinks ?? null,
+    seoDefaults: overrides.seoDefaults ?? null,
+  } as any);
+  return repo.save(site as any);
 }
 
 export function signToken(
