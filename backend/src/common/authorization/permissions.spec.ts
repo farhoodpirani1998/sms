@@ -29,6 +29,29 @@ describe('roleHasPermission', () => {
   it('denies an unrecognized role string rather than throwing', () => {
     expect(roleHasPermission('some_made_up_role', Permission.PAYMENT_VOID)).toBe(false);
   });
+
+  it('grants school_admin all four CMS permissions', () => {
+    expect(roleHasPermission(Role.SCHOOL_ADMIN, Permission.CMS_CONTENT_EDIT)).toBe(true);
+    expect(roleHasPermission(Role.SCHOOL_ADMIN, Permission.CMS_CONTENT_PUBLISH)).toBe(true);
+    expect(roleHasPermission(Role.SCHOOL_ADMIN, Permission.CMS_MEDIA_MANAGE)).toBe(true);
+    expect(roleHasPermission(Role.SCHOOL_ADMIN, Permission.CMS_SITE_MANAGE)).toBe(true);
+  });
+
+  it('grants staff CMS_CONTENT_EDIT and CMS_MEDIA_MANAGE but not publish or site management', () => {
+    expect(roleHasPermission(Role.STAFF, Permission.CMS_CONTENT_EDIT)).toBe(true);
+    expect(roleHasPermission(Role.STAFF, Permission.CMS_MEDIA_MANAGE)).toBe(true);
+    expect(roleHasPermission(Role.STAFF, Permission.CMS_CONTENT_PUBLISH)).toBe(false);
+    expect(roleHasPermission(Role.STAFF, Permission.CMS_SITE_MANAGE)).toBe(false);
+  });
+
+  it('denies accountant, parent, and teacher every CMS permission', () => {
+    for (const role of [Role.ACCOUNTANT, Role.PARENT, Role.TEACHER]) {
+      expect(roleHasPermission(role, Permission.CMS_CONTENT_EDIT)).toBe(false);
+      expect(roleHasPermission(role, Permission.CMS_CONTENT_PUBLISH)).toBe(false);
+      expect(roleHasPermission(role, Permission.CMS_MEDIA_MANAGE)).toBe(false);
+      expect(roleHasPermission(role, Permission.CMS_SITE_MANAGE)).toBe(false);
+    }
+  });
 });
 
 describe('DISCOUNT_CEILING_RATIO', () => {

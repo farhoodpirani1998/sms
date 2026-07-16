@@ -1,25 +1,26 @@
-# CMS-A.1 delivery
+# CMS-A.2 delivery
 
-Foundation sub-phase: Postgres `cms` schema + `Site` entity/table/seed +
-admin CRUD module, wired into AppModule. BaseCmsEntity, ContentStatus,
-and the CMS_* Permission enum are deferred to CMS-A.2.
-
-## How to apply
-
-Copy the `src/` tree in this zip on top of the existing backend repo
-(paths match 1:1 — 2 new migrations, 1 new app.module.ts to merge/replace,
-and the new src/modules/cms/ tree), then:
-
-    npm run migration:run
+Cross-cutting foundation pieces the content types (CMS-D onward) will
+extend: ContentStatus enum, BaseCmsEntity, and the CMS_* Permission
+enum + role grants. Also swaps SiteController's temporary
+`@Roles('school_admin')`-only gate for the real
+`@RequirePermission(Permission.CMS_SITE_MANAGE)`, now that the
+permission exists.
 
 ## Files
-- src/database/migrations/1737600000000-CreateCmsSchema.ts   (new)
-- src/database/migrations/1737700000000-CmsSite.ts            (new)
-- src/app.module.ts                                            (modified — added CmsModule import)
-- src/modules/cms/cms.module.ts                                (new)
-- src/modules/cms/core/site/site.module.ts                     (new)
-- src/modules/cms/core/site/site.controller.ts                 (new)
-- src/modules/cms/core/site/site.service.ts                    (new)
-- src/modules/cms/core/site/entities/site.entity.ts             (new)
-- src/modules/cms/core/site/dto/create-site.dto.ts              (new)
-- src/modules/cms/core/site/dto/update-site.dto.ts              (new)
+- src/common/authorization/permissions.ts        (modified — added 4 CMS_* permissions + role grants)
+- src/common/authorization/permissions.spec.ts    (modified — added CMS grant/deny test cases)
+- src/modules/cms/common/enums/content-status.enum.ts   (new)
+- src/modules/cms/common/entities/base-cms.entity.ts    (new)
+- src/modules/cms/core/site/site.controller.ts           (modified — real permission gate)
+
+No migrations in this sub-phase — BaseCmsEntity isn't backed by any
+table until a concrete content type extends it (CMS-D+).
+
+## How to apply
+Copy the src/ tree on top of the existing repo (permissions.ts,
+permissions.spec.ts, and site.controller.ts are modifications —
+merge/replace them; the rest are new files), then run the existing
+test suite:
+
+    npm test -- permissions.spec
