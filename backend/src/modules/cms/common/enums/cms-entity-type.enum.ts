@@ -25,6 +25,8 @@
 //
 // STATISTIC (CMS-D.4) — same, for the fourth CMS-D content type (the
 // first list type where reorder sees real operational use).
+//
+// FEATURE (CMS-D.5) — same, for the fifth CMS-D content type.
 export enum CmsEntityType {
   MEDIA_ASSET = 'media_asset',
   PROOF_BLOCK = 'proof_block',
@@ -32,4 +34,5 @@ export enum CmsEntityType {
   ABOUT = 'about',
   CTA = 'cta',
   STATISTIC = 'statistic',
+  FEATURE = 'feature',
 }

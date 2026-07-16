@@ -9,6 +9,7 @@ import { HeroModule } from './content/hero/hero.module';
 import { AboutModule } from './content/about/about.module';
 import { CtaModule } from './content/cta/cta.module';
 import { StatisticsModule } from './content/statistics/statistics.module';
+import { FeaturesModule } from './content/features/features.module';
 
 /**
  * Aggregates every `core/*` and `content/*` CMS sub-module. Imported once
@@ -56,6 +57,11 @@ import { StatisticsModule } from './content/statistics/statistics.module';
  * content type exercising `OrderingService.reorder()` operationally,
  * per the roadmap's D.4 note.
  *
+ * CMS-D.5 adds `FeaturesModule` (`content/features/`), copying the same
+ * shape onto the `features` table — `coverMediaId`/`MediaAsset` is back
+ * here (third and last of the three CMS-D types with an image field,
+ * per the migration's doc comment).
+ *
  * The rest of `core/*` (seo, i18n, public-api) and the remaining 12 real
  * `content/*` types land in later phases and get added to this `imports`
  * array as they're built — this module is intentionally left open for
@@ -79,6 +85,7 @@ import { StatisticsModule } from './content/statistics/statistics.module';
     AboutModule,
     CtaModule,
     StatisticsModule,
+    FeaturesModule,
   ],
 })
 export class CmsModule {}
