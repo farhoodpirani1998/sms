@@ -20,9 +20,12 @@
 //
 // ABOUT (CMS-D.2) confirms the pattern: one more entry, added exactly
 // when its content type lands, nothing else about the enum changes.
+//
+// CTA (CMS-D.3) — same, one more entry for the third CMS-D content type.
 export enum CmsEntityType {
   MEDIA_ASSET = 'media_asset',
   PROOF_BLOCK = 'proof_block',
   HERO = 'hero',
   ABOUT = 'about',
+  CTA = 'cta',
 }

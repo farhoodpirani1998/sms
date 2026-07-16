@@ -7,6 +7,7 @@ import { OrderingModule } from './core/ordering/ordering.module';
 import { ProofBlockModule } from './content/_proof/proof-block.module';
 import { HeroModule } from './content/hero/hero.module';
 import { AboutModule } from './content/about/about.module';
+import { CtaModule } from './content/cta/cta.module';
 
 /**
  * Aggregates every `core/*` and `content/*` CMS sub-module. Imported once
@@ -45,6 +46,10 @@ import { AboutModule } from './content/about/about.module';
  * shape onto the `about_items` table — confirms the pattern replicates
  * cleanly to a second content type.
  *
+ * CMS-D.3 adds `CtaModule` (`content/cta/`), copying the same shape onto
+ * the `cta_items` table — no `coverMediaId`/`MediaAsset` reference here,
+ * since CTA has no image field (see that entity's doc comment).
+ *
  * The rest of `core/*` (seo, i18n, public-api) and the remaining 12 real
  * `content/*` types land in later phases and get added to this `imports`
  * array as they're built — this module is intentionally left open for
@@ -66,6 +71,7 @@ import { AboutModule } from './content/about/about.module';
     ProofBlockModule,
     HeroModule,
     AboutModule,
+    CtaModule,
   ],
 })
 export class CmsModule {}
