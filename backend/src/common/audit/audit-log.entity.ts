@@ -22,6 +22,13 @@ export enum AuditAction {
   CREATE_INSTALLMENT = 'CREATE_INSTALLMENT',
   UPDATE_INSTALLMENT = 'UPDATE_INSTALLMENT',
   DISCOUNT_APPLIED = 'DISCOUNT_APPLIED',
+  // CMS-C.4 — PublishingService actions. CMS rows always carry
+  // `schoolId: null` (CMS is a bounded context separate from School, see
+  // docs/architecture/CMS_ARCHITECTURE.md §1); `entityType`/`entityId`
+  // carry the CmsEntityType/content-row id instead.
+  CMS_CONTENT_PUBLISHED = 'CMS_CONTENT_PUBLISHED',
+  CMS_CONTENT_UNPUBLISHED = 'CMS_CONTENT_UNPUBLISHED',
+  CMS_CONTENT_SCHEDULED = 'CMS_CONTENT_SCHEDULED',
 }
 
 /**
