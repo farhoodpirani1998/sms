@@ -11,7 +11,14 @@
 // stack before any real content type exists. Left in place for as long
 // as the `_proof` module is (see that module's doc comment) — removing
 // it is bundled with deleting `_proof`, not done separately here.
+//
+// HERO (CMS-D.1) is the first entry for a real, non-disposable content
+// type — the reference implementation D.2–D.6 copy. The other five
+// CMS-D tables (about/cta/statistics/features/faq) land in this same
+// migration, but their enum entries are added by their own sub-phases,
+// one at a time, same as every other content type going forward.
 export enum CmsEntityType {
   MEDIA_ASSET = 'media_asset',
   PROOF_BLOCK = 'proof_block',
+  HERO = 'hero',
 }

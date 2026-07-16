@@ -89,6 +89,11 @@ export async function truncateAll(app: INestApplication): Promise<void> {
     // proof_blocks/content_revisions added for CMS-C.5's e2e spec, the
     // first to exercise the throwaway ProofBlock entity and the generic
     // revisions table — both FK to sites, same ordering reasoning.
+    //
+    // hero_items added for CMS-D.1's e2e spec — the first real,
+    // non-disposable content type. FKs to sites (and, optionally,
+    // media_assets), so it's truncated before both.
+    'cms.hero_items',
     'cms.media_assets',
     'cms.proof_blocks',
     'cms.content_revisions',
