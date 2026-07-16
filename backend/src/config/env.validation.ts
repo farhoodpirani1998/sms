@@ -7,6 +7,11 @@ enum Environment {
   Test = 'test',
 }
 
+enum MediaStorageDriver {
+  Local = 'local',
+  S3 = 's3',
+}
+
 /**
  * Shape of the environment variables the app actually depends on.
  * Validated once at startup (wired via ConfigModule.forRoot({ validate })
@@ -60,6 +65,20 @@ class EnvironmentVariables {
   @IsOptional()
   @IsString()
   LOG_LEVEL?: string;
+
+  // CMS-B.2/B.3: selects StorageProvider implementation. Optional and
+  // defaults to 'local' (see media.module.ts) so existing deployments
+  // that predate the CMS media feature don't need a new env var to keep
+  // booting.
+  @IsOptional()
+  @IsEnum(MediaStorageDriver)
+  MEDIA_STORAGE_DRIVER?: MediaStorageDriver;
+
+  // Only consulted when MEDIA_STORAGE_DRIVER=local (or unset). Defaults
+  // to './storage/media' in LocalDiskStorageProvider itself if omitted.
+  @IsOptional()
+  @IsString()
+  MEDIA_LOCAL_PATH?: string;
 }
 
 // Minimum JWT_SECRET length enforced only in production — long enough to
