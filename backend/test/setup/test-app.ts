@@ -85,7 +85,13 @@ export async function truncateAll(app: INestApplication): Promise<void> {
     // creates Sites and MediaAssets that must not leak between tests.
     // media_assets first: it FKs to sites, and CASCADE handles the
     // rest, but explicit ordering keeps this list readable top-down.
+    //
+    // proof_blocks/content_revisions added for CMS-C.5's e2e spec, the
+    // first to exercise the throwaway ProofBlock entity and the generic
+    // revisions table — both FK to sites, same ordering reasoning.
     'cms.media_assets',
+    'cms.proof_blocks',
+    'cms.content_revisions',
     'cms.sites',
     'audit_logs',
     'school_settings',
