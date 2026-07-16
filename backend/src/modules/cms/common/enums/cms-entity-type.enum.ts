@@ -33,6 +33,10 @@
 //
 // SITE_SETTINGS (CMS-E.1) — first CMS-E entry, and the first singleton
 // content type (see that entity's doc comment for what that means).
+//
+// NAVIGATION_ITEM (CMS-E.2) — second and last CMS-E entry. A menu tree
+// row; self-referencing via parentId rather than a singleton, but still
+// one closed enum entry per table like every other content type.
 export enum CmsEntityType {
   MEDIA_ASSET = 'media_asset',
   PROOF_BLOCK = 'proof_block',
@@ -43,4 +47,5 @@ export enum CmsEntityType {
   FEATURE = 'feature',
   FAQ = 'faq',
   SITE_SETTINGS = 'site_settings',
+  NAVIGATION_ITEM = 'navigation_item',
 }

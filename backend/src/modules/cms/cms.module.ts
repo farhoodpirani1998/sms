@@ -12,6 +12,7 @@ import { StatisticsModule } from './content/statistics/statistics.module';
 import { FeaturesModule } from './content/features/features.module';
 import { FaqModule } from './content/faq/faq.module';
 import { SiteSettingsModule } from './content/site-settings/site-settings.module';
+import { NavigationModule } from './content/navigation/navigation.module';
 
 /**
  * Aggregates every `core/*` and `content/*` CMS sub-module. Imported once
@@ -77,6 +78,15 @@ import { SiteSettingsModule } from './content/site-settings/site-settings.module
  * `NavigationModule` (CMS-E.2) shares that same migration's second
  * table and is added here once it lands.
  *
+ * CMS-E.2 adds `NavigationModule` (`content/navigation/`) — the second
+ * and last CMS-E type, sharing `CmsSiteSettingsNavigation`'s
+ * `navigation_items` table (already created in CMS-E.1). Unlike every
+ * CMS-D type and `SiteSettings`, it's a self-referencing tree
+ * (`parentId`) rather than a flat per-Site list, so its service adds
+ * tree assembly and per-parent reordering on top of the same
+ * `BaseContentService`/`PublishingService`/`OrderingService` primitives.
+ * This completes CMS-E. CMS-F (Pages) can begin.
+ *
  * The rest of `core/*` (seo, i18n, public-api) and the remaining 12 real
  * `content/*` types land in later phases and get added to this `imports`
  * array as they're built — this module is intentionally left open for
@@ -103,6 +113,7 @@ import { SiteSettingsModule } from './content/site-settings/site-settings.module
     FeaturesModule,
     FaqModule,
     SiteSettingsModule,
+    NavigationModule,
   ],
 })
 export class CmsModule {}
