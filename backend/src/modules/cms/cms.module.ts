@@ -6,6 +6,7 @@ import { PublishingModule } from './core/publishing/publishing.module';
 import { OrderingModule } from './core/ordering/ordering.module';
 import { ProofBlockModule } from './content/_proof/proof-block.module';
 import { HeroModule } from './content/hero/hero.module';
+import { AboutModule } from './content/about/about.module';
 
 /**
  * Aggregates every `core/*` and `content/*` CMS sub-module. Imported once
@@ -40,7 +41,11 @@ import { HeroModule } from './content/hero/hero.module';
  * migration) already created for them (about/cta/statistics/features/
  * faq) — each lands its own module import here as it's built.
  *
- * The rest of `core/*` (seo, i18n, public-api) and the remaining 13 real
+ * CMS-D.2 adds `AboutModule` (`content/about/`), copying `HeroModule`'s
+ * shape onto the `about_items` table — confirms the pattern replicates
+ * cleanly to a second content type.
+ *
+ * The rest of `core/*` (seo, i18n, public-api) and the remaining 12 real
  * `content/*` types land in later phases and get added to this `imports`
  * array as they're built — this module is intentionally left open for
  * that rather than pre-declaring empty placeholder modules for work that
@@ -60,6 +65,7 @@ import { HeroModule } from './content/hero/hero.module';
     OrderingModule,
     ProofBlockModule,
     HeroModule,
+    AboutModule,
   ],
 })
 export class CmsModule {}

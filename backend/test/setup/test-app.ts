@@ -93,6 +93,9 @@ export async function truncateAll(app: INestApplication): Promise<void> {
     // hero_items added for CMS-D.1's e2e spec — the first real,
     // non-disposable content type. FKs to sites (and, optionally,
     // media_assets), so it's truncated before both.
+    //
+    // about_items added for CMS-D.2's e2e spec — same reasoning.
+    'cms.about_items',
     'cms.hero_items',
     'cms.media_assets',
     'cms.proof_blocks',

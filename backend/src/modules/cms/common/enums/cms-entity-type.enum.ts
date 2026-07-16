@@ -17,8 +17,12 @@
 // CMS-D tables (about/cta/statistics/features/faq) land in this same
 // migration, but their enum entries are added by their own sub-phases,
 // one at a time, same as every other content type going forward.
+//
+// ABOUT (CMS-D.2) confirms the pattern: one more entry, added exactly
+// when its content type lands, nothing else about the enum changes.
 export enum CmsEntityType {
   MEDIA_ASSET = 'media_asset',
   PROOF_BLOCK = 'proof_block',
   HERO = 'hero',
+  ABOUT = 'about',
 }
