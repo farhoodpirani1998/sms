@@ -3,8 +3,10 @@ import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 
 /**
- * `MediaProcessingQueue` — CMS-B.5 (deferred/optional per the roadmap:
- * "can slip to a later phase"). Async thumbnailing for uploaded images,
+ * `MediaProcessingQueue` — CMS-B.5 (marked deferred/optional in the
+ * roadmap: "can slip to a later phase"; shipped anyway — see the
+ * CMS handoff report, docs/reports/CMS_HANDOFF_FINAL_CHECKS.md §2).
+ * Async thumbnailing for uploaded images,
  * on the same BullMQ connection `NotificationsModule` already registers
  * against (see `BullModule.forRoot` in `app.module.ts` — a single Redis
  * connection shared by every queue in the app; this sub-phase only adds

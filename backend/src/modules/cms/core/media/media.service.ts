@@ -15,7 +15,9 @@ import { MediaProcessingQueue } from './media-processing.queue';
  * fresh upload (as opposed to just referencing an existing
  * `coverMediaId`) goes through this same path.
  *
- * CMS-B.5 (deferred/optional): after an image is stored, enqueues async
+ * CMS-B.5 (marked deferred/optional in the roadmap; shipped anyway —
+ * see docs/reports/CMS_HANDOFF_FINAL_CHECKS.md §2): after an image is
+ * stored, enqueues async
  * thumbnail generation via `MediaProcessingQueue` — fire-and-forget, so
  * a slow/failed thumbnail job never delays or fails the upload response
  * itself. Non-image uploads (PDFs, etc.) are left alone; there's nothing

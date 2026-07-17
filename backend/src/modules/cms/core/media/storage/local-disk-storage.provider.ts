@@ -13,11 +13,11 @@ import { StorageProvider, StoredFile } from './storage-provider.interface';
  * site-scope keys yet since no caller (the upload endpoint) exists until
  * CMS-B.4.
  *
- * `url` is a relative `/media/{key}` path. Actually serving that path
- * (a static assets mount, or a dedicated read-back route) is not part of
- * this sub-phase — CMS-B.4's upload endpoint is the first real caller,
- * and whatever serves `/media/*` in production is an ops/deployment
- * concern outside the CMS module's own code.
+ * `url` is a relative `/media/{key}` path, actually served by
+ * `app.useStaticAssets()` in `main.ts` (added during the CMS handoff
+ * polish pass — see docs/deployment/DEPLOYMENT.md's "Media storage"
+ * section for the cross-origin caveat if the public frontend is on a
+ * different origin than this API).
  */
 @Injectable()
 export class LocalDiskStorageProvider implements StorageProvider {

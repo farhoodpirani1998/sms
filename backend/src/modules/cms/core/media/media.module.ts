@@ -26,7 +26,9 @@ import { MediaProcessingProcessor } from './media-processing.processor';
  * re-declaring a Site repository" shape later content modules will reuse
  * (see `SiteModule`'s own doc comment).
  *
- * CMS-B.5 (deferred/optional) registers the `media-processing` queue on
+ * CMS-B.5 (marked deferred/optional in the roadmap; shipped anyway —
+ * see docs/reports/CMS_HANDOFF_FINAL_CHECKS.md §2) registers the
+ * `media-processing` queue on
  * the app's existing BullMQ connection (`BullModule.forRoot` in
  * `app.module.ts` — no new connection here, same pattern as
  * `NotificationsModule`) and provides `MediaProcessingQueue` +

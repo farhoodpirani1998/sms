@@ -1,12 +1,14 @@
 import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { ValidationPipe } from '@nestjs/common';
+import { resolve } from 'path';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './common/filters/http-exception.filter';
 import { AppLogger } from './common/logging/app-logger.service';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     // Structured (JSON in production, pretty in dev) logger — see
     // app-logger.service.ts. bufferLogs holds Nest's own bootstrap log
     // lines until this logger is ready, so nothing gets lost/printed via
@@ -32,6 +34,25 @@ async function bootstrap() {
   app.enableShutdownHooks();
 
   app.use(helmet());
+
+  // CMS media (src/modules/cms/core/media): when MEDIA_STORAGE_DRIVER is
+  // "local" (the default — see .env.example), LocalDiskStorageProvider
+  // writes files to disk and returns a `/media/{key}` URL, but until now
+  // nothing actually served that path — uploads succeeded but were
+  // unreachable over HTTP. This was flagged as an open gap in
+  // docs/deployment/DEPLOYMENT.md's "CMS module — production readiness"
+  // section; closing it here rather than leaving it purely a docs note.
+  // Mounted outside `api/v1` (matches the bare `/media/...` URL the
+  // provider returns, same base path used for both), with directory
+  // listing and dotfile access both denied. When MEDIA_STORAGE_DRIVER=s3,
+  // this route simply serves nothing (no local files exist to find) and
+  // is harmless to leave mounted.
+  const mediaLocalPath = resolve(process.env.MEDIA_LOCAL_PATH || './storage/media');
+  app.useStaticAssets(mediaLocalPath, {
+    prefix: '/media/',
+    index: false,
+    dotfiles: 'deny',
+  });
 
   const configuredOrigins = process.env.CORS_ORIGINS?.split(',').map((o) => o.trim()).filter(Boolean);
 

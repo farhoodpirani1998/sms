@@ -112,12 +112,21 @@ running the `local` driver in production:
 - On more than one app instance (any horizontally-scaled deployment),
   `MEDIA_LOCAL_PATH` must be a *shared* volume, or uploads written by one
   instance 404 when read back through another.
-- Nothing in the app currently serves the `/media/{key}` URL
-  `LocalDiskStorageProvider` returns — no static-assets mount exists in
-  `main.ts`. Production must add one (or a reverse-proxy rule pointing at
-  the same volume) for local-stored media to be reachable at all; this is
-  unchanged from the provider's own doc comment, which already calls this
-  an ops/deployment concern outside the CMS module's code.
+- ~~Nothing in the app currently serves the `/media/{key}` URL~~
+  **Resolved:** `main.ts` now mounts `app.useStaticAssets(MEDIA_LOCAL_PATH,
+  { prefix: '/media/' })` (directory listing and dotfiles both denied),
+  so locally-stored media is reachable at the same `/media/{key}` URL
+  `LocalDiskStorageProvider` returns. Still worth confirming in
+  production: **`helmet()`'s default `Cross-Origin-Resource-Policy:
+  same-origin`** applies to this route too — if the public website that
+  displays this media is served from a different origin than this API
+  (a separate domain, or even a different port), browsers will block
+  those `<img>`/asset loads unless `helmet`'s
+  `crossOriginResourcePolicy` is relaxed (e.g. `{ policy:
+  'cross-origin' }`) for this app, or a reverse proxy serves `/media/*`
+  directly instead of routing it through Nest. Not changed here since
+  it's a same-origin-vs-cross-origin call that depends on the final
+  frontend/API domain setup, not something safe to assume.
 
 For the `s3` driver: `S3StorageProvider` talks to real AWS S3 today — the
 URL it returns is hardcoded to
