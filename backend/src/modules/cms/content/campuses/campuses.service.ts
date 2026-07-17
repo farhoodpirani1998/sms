@@ -118,7 +118,12 @@ export class CampusesService extends BaseContentService<Campus> implements OnMod
 
     return rows.map((row) => ({
       id: row.id,
-      name: this.localeResolverService.resolveText(row.name, locale, defaultLocale),
+      // `name` is `NOT NULL` at the DB level (required in
+      // `CreateCampusDto`, see that DTO's doc comment) — `resolveText`'s
+      // return type is `string | null` generically (it can't know this
+      // column's constraint), so the assertion just reflects that
+      // guarantee rather than changing behavior.
+      name: this.localeResolverService.resolveText(row.name, locale, defaultLocale)!,
       address: this.localeResolverService.resolveText(row.address, locale, defaultLocale),
       description: this.localeResolverService.resolveText(row.description, locale, defaultLocale),
       sortOrder: row.sortOrder,

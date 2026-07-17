@@ -185,7 +185,7 @@ describe('CMS News (CMS-G.1/G.2 e2e)', () => {
       // Newest first: the third article published last.
       expect(listRes.body.data[0].title).toBe('Third article');
       expect(listRes.body.data[0].body).toBeUndefined();
-      expect(listRes.body.data.find((a: any) => a.id === draft.id)).toBeUndefined();
+      expect(listRes.body.data.find((a: any) => a.id === draft.body.id)).toBeUndefined();
 
       const secondPage = await request(server)
         .get(`/api/v1/public/news?page=2&limit=2`)
