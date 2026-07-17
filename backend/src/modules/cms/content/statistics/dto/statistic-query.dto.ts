@@ -14,11 +14,10 @@ export class StatisticListQueryDto extends PaginationQueryDto {
   siteId: string;
 }
 
-/** `GET /cms/public/statistics` — public read scope, locale-resolved. */
-export class PublicStatisticQueryDto extends LocaleQueryDto {
-  @IsUUID()
-  siteId: string;
-}
+/** `GET /cms/public/statistics` — public read scope, locale-resolved. `siteId` no longer
+ * travels here as of CMS-I.3 — `PublicSiteContextGuard` resolves the
+ * Site from the `Host` header (or dev slug fallback) instead. */
+export class PublicStatisticQueryDto extends LocaleQueryDto {}
 
 /** `POST /cms/statistics/:id/schedule` body. */
 export class ScheduleStatisticDto {

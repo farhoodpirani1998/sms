@@ -9,6 +9,7 @@ import { SiteModule } from '../../core/site/site.module';
 import { RevisionsModule } from '../../core/revisions/revisions.module';
 import { PublishingModule } from '../../core/publishing/publishing.module';
 import { OrderingModule } from '../../core/ordering/ordering.module';
+import { PublicApiModule } from '../../core/public-api/public-api.module';
 
 /**
  * `FaqModule` — CMS-D.6. Copies `HeroModule` (CMS-D.1)/`AboutModule`
@@ -17,6 +18,10 @@ import { OrderingModule } from '../../core/ordering/ordering.module';
  * `SiteModule` for `LocaleResolverService`. Not exported — nothing
  * outside this module needs `FaqService`. Last module CMS-D adds; all
  * six simple content types are now complete.
+ *
+ * CMS-I.3 adds `PublicApiModule` so the public controller can
+ * `@UseGuards(PublicSiteContextGuard)`/`@UseInterceptors(PublicCacheInterceptor)`
+ * — Site is now resolved from the `Host` header instead of `?siteId=`.
  */
 @Module({
   imports: [
@@ -25,6 +30,7 @@ import { OrderingModule } from '../../core/ordering/ordering.module';
     RevisionsModule,
     PublishingModule,
     OrderingModule,
+    PublicApiModule,
   ],
   controllers: [FaqController, FaqPublicController],
   providers: [FaqService, LocaleResolverService],

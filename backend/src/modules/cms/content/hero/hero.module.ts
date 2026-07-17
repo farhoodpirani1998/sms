@@ -9,6 +9,7 @@ import { SiteModule } from '../../core/site/site.module';
 import { RevisionsModule } from '../../core/revisions/revisions.module';
 import { PublishingModule } from '../../core/publishing/publishing.module';
 import { OrderingModule } from '../../core/ordering/ordering.module';
+import { PublicApiModule } from '../../core/public-api/public-api.module';
 
 /**
  * `HeroModule` — CMS-D.1. Same cross-cutting import shape
@@ -26,6 +27,10 @@ import { OrderingModule } from '../../core/ordering/ordering.module';
  * This is the reference implementation — D.2–D.6 copy this file 1:1
  * against the tables `CmsSimpleContent` (this sub-phase's migration)
  * already created for them.
+ *
+ * CMS-I.3 adds `PublicApiModule` so the public controller can
+ * `@UseGuards(PublicSiteContextGuard)`/`@UseInterceptors(PublicCacheInterceptor)`
+ * — Site is now resolved from the `Host` header instead of `?siteId=`.
  */
 @Module({
   imports: [
@@ -34,6 +39,7 @@ import { OrderingModule } from '../../core/ordering/ordering.module';
     RevisionsModule,
     PublishingModule,
     OrderingModule,
+    PublicApiModule,
   ],
   controllers: [HeroController, HeroPublicController],
   providers: [HeroService, LocaleResolverService],

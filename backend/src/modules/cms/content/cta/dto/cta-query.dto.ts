@@ -14,11 +14,10 @@ export class CtaListQueryDto extends PaginationQueryDto {
   siteId: string;
 }
 
-/** `GET /cms/public/cta` — public read scope, locale-resolved. */
-export class PublicCtaQueryDto extends LocaleQueryDto {
-  @IsUUID()
-  siteId: string;
-}
+/** `GET /cms/public/cta` — public read scope, locale-resolved. `siteId` no longer
+ * travels here as of CMS-I.3 — `PublicSiteContextGuard` resolves the
+ * Site from the `Host` header (or dev slug fallback) instead. */
+export class PublicCtaQueryDto extends LocaleQueryDto {}
 
 /** `POST /cms/cta/:id/schedule` body. */
 export class ScheduleCtaDto {

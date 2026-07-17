@@ -182,7 +182,9 @@ describe('CMS Hero (CMS-D.1 e2e)', () => {
       .post(`/api/v1/cms/hero/${published.body.id}/publish?siteId=${site.id}`)
       .set('Authorization', authHeader(app, schoolAdmin));
 
-    const publicRes = await request(server).get(`/api/v1/cms/public/hero?siteId=${site.id}`);
+    const publicRes = await request(server)
+      .get(`/api/v1/cms/public/hero`)
+      .set('Host', site.domain);
 
     expect(publicRes.status).toBe(200);
     expect(publicRes.body).toHaveLength(1);
@@ -195,16 +197,16 @@ describe('CMS Hero (CMS-D.1 e2e)', () => {
     expect(publicRes.body.find((h: any) => h.id === draft.body.id)).toBeUndefined();
 
     // Requesting an unsupported locale falls back to the Site's default.
-    const publicResBadLocale = await request(server).get(
-      `/api/v1/cms/public/hero?siteId=${site.id}&locale=de`,
-    );
+    const publicResBadLocale = await request(server)
+      .get(`/api/v1/cms/public/hero?locale=de`)
+      .set('Host', site.domain);
     expect(publicResBadLocale.body[0].title).toBe('Published hero');
 
     // Requesting a supported locale resolves it; a field only entered in
     // English falls back to the default locale rather than returning null.
-    const publicResFa = await request(server).get(
-      `/api/v1/cms/public/hero?siteId=${site.id}&locale=fa`,
-    );
+    const publicResFa = await request(server)
+      .get(`/api/v1/cms/public/hero?locale=fa`)
+      .set('Host', site.domain);
     expect(publicResFa.body[0].title).toBe('قهرمان منتشر شده');
     expect(publicResFa.body[0].subtitle).toBe('English subtitle');
   });
@@ -219,9 +221,9 @@ describe('CMS Hero (CMS-D.1 e2e)', () => {
       .post(`/api/v1/cms/hero/${created.body.id}/publish?siteId=${site.id}`)
       .set('Authorization', authHeader(app, schoolAdmin));
 
-    const otherSitePublicRes = await request(server).get(
-      `/api/v1/cms/public/hero?siteId=${otherSite.id}`,
-    );
+    const otherSitePublicRes = await request(server)
+      .get(`/api/v1/cms/public/hero`)
+      .set('Host', otherSite.domain);
 
     expect(otherSitePublicRes.status).toBe(200);
     expect(otherSitePublicRes.body).toHaveLength(0);

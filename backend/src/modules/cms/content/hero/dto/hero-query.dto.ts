@@ -22,14 +22,13 @@ export class HeroListQueryDto extends PaginationQueryDto {
 }
 
 /**
- * `GET /cms/public/hero` — public read scope. `locale` is optional and
+ * `GET /cms/public/hero` — public read scope. `siteId` no longer travels here as of
+ * CMS-I.3 — `PublicSiteContextGuard` resolves the Site from the `Host`
+ * header (or dev slug fallback) instead. `locale` is still optional and
  * resolved against the Site's supported locales by `LocaleResolverService`
  * (falls back to the Site's `defaultLocale` when omitted or unsupported).
  */
-export class PublicHeroQueryDto extends LocaleQueryDto {
-  @IsUUID()
-  siteId: string;
-}
+export class PublicHeroQueryDto extends LocaleQueryDto {}
 
 /** `POST /cms/hero/:id/schedule` body. */
 export class ScheduleHeroDto {

@@ -14,11 +14,10 @@ export class AboutListQueryDto extends PaginationQueryDto {
   siteId: string;
 }
 
-/** `GET /cms/public/about` — public read scope, locale-resolved. */
-export class PublicAboutQueryDto extends LocaleQueryDto {
-  @IsUUID()
-  siteId: string;
-}
+/** `GET /cms/public/about` — public read scope, locale-resolved. `siteId` no longer
+ * travels here as of CMS-I.3 — `PublicSiteContextGuard` resolves the
+ * Site from the `Host` header (or dev slug fallback) instead. */
+export class PublicAboutQueryDto extends LocaleQueryDto {}
 
 /** `POST /cms/about/:id/schedule` body. */
 export class ScheduleAboutDto {

@@ -169,7 +169,9 @@ describe('CMS Statistics (CMS-D.4 e2e)', () => {
       .post(`/api/v1/cms/statistics/${published.body.id}/publish?siteId=${site.id}`)
       .set('Authorization', authHeader(app, schoolAdmin));
 
-    const publicRes = await request(server).get(`/api/v1/cms/public/statistics?siteId=${site.id}`);
+    const publicRes = await request(server)
+      .get(`/api/v1/cms/public/statistics`)
+      .set('Host', site.domain);
 
     expect(publicRes.status).toBe(200);
     expect(publicRes.body).toHaveLength(1);
@@ -181,14 +183,14 @@ describe('CMS Statistics (CMS-D.4 e2e)', () => {
 
     expect(publicRes.body.find((s: any) => s.id === draft.body.id)).toBeUndefined();
 
-    const publicResBadLocale = await request(server).get(
-      `/api/v1/cms/public/statistics?siteId=${site.id}&locale=de`,
-    );
+    const publicResBadLocale = await request(server)
+      .get(`/api/v1/cms/public/statistics?locale=de`)
+      .set('Host', site.domain);
     expect(publicResBadLocale.body[0].label).toBe('Published stat');
 
-    const publicResFa = await request(server).get(
-      `/api/v1/cms/public/statistics?siteId=${site.id}&locale=fa`,
-    );
+    const publicResFa = await request(server)
+      .get(`/api/v1/cms/public/statistics?locale=fa`)
+      .set('Host', site.domain);
     expect(publicResFa.body[0].label).toBe('آمار منتشر شده');
   });
 
@@ -202,9 +204,9 @@ describe('CMS Statistics (CMS-D.4 e2e)', () => {
       .post(`/api/v1/cms/statistics/${created.body.id}/publish?siteId=${site.id}`)
       .set('Authorization', authHeader(app, schoolAdmin));
 
-    const otherSitePublicRes = await request(server).get(
-      `/api/v1/cms/public/statistics?siteId=${otherSite.id}`,
-    );
+    const otherSitePublicRes = await request(server)
+      .get(`/api/v1/cms/public/statistics`)
+      .set('Host', otherSite.domain);
 
     expect(otherSitePublicRes.status).toBe(200);
     expect(otherSitePublicRes.body).toHaveLength(0);

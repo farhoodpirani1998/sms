@@ -1,25 +1,28 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Query, UseGuards, UseInterceptors } from '@nestjs/common';
 import { HeroService } from './hero.service';
 import { PublicHeroQueryDto } from './dto/hero-query.dto';
+import { PublicSiteContextGuard } from '../../core/public-api/guards/public-site-context.guard';
+import { PublicCacheInterceptor } from '../../core/public-api/interceptors/public-cache.interceptor';
+import { PublicSiteContext } from '../../common/decorators/public-site-context.decorator';
+import { Site } from '../../core/site/entities/site.entity';
 
 /**
- * `cms/public/hero` — CMS-D.1. Public read endpoint: every `PUBLISHED`
- * Hero row for a Site, localized. Deliberately unguarded (no auth — this
- * is public-facing website content) and uncached — per the roadmap,
- * `PublicSiteContextGuard` (Host-header Site resolution, replacing this
- * endpoint's `?siteId=` query param) and `PublicCacheInterceptor` both
- * land in CMS-I, once all 14 content types' public controllers exist to
- * wire them into at once. Until then, every `content/*` public
- * controller (this one included) takes `siteId` directly as a query
- * param, same stopgap `SiteResolverService`'s CMS-A.3 doc comment
- * already flags for the admin side.
+ * `cms/public/hero` — CMS-D wired for CMS-I.3. Public read
+ * endpoint: every `PUBLISHED` Hero row for a Site, localized.
+ * Deliberately unauthenticated (this is public-facing website content),
+ * but now Site-scoped via `PublicSiteContextGuard` (Host-header
+ * resolution, with the CMS-A.3/I.1 dev slug fallback) instead of the
+ * old `?siteId=` query param, and cached by `PublicCacheInterceptor`
+ * per the roadmap's CMS-I.2/I.3 pairing.
  */
 @Controller('cms/public/hero')
+@UseGuards(PublicSiteContextGuard)
+@UseInterceptors(PublicCacheInterceptor)
 export class HeroPublicController {
   constructor(private readonly heroService: HeroService) {}
 
   @Get()
-  async findPublished(@Query() query: PublicHeroQueryDto) {
-    return this.heroService.findPublished(query.siteId, query.locale);
+  async findPublished(@PublicSiteContext() site: Site, @Query() query: PublicHeroQueryDto) {
+    return this.heroService.findPublished(site.id, query.locale);
   }
 }
