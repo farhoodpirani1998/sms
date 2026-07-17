@@ -74,7 +74,7 @@ export class MediaAsset {
   @Column({ name: 'alt_text', type: 'varchar', length: 500, nullable: true })
   altText: string | null;
 
-  @Column({ name: 'uploaded_by_id', nullable: true })
+  @Column({ name: 'uploaded_by_id', type: 'uuid', nullable: true })
   uploadedById: string | null;
 
   @CreateDateColumn({ name: 'created_at' })

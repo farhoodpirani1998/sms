@@ -41,10 +41,10 @@ export abstract class BaseCmsEntity {
   @Column({ name: 'scheduled_at', type: 'timestamptz', nullable: true })
   scheduledAt: Date | null;
 
-  @Column({ name: 'created_by_id', nullable: true })
+  @Column({ name: 'created_by_id', type: 'uuid', nullable: true })
   createdById: string | null;
 
-  @Column({ name: 'updated_by_id', nullable: true })
+  @Column({ name: 'updated_by_id', type: 'uuid', nullable: true })
   updatedById: string | null;
 
   @CreateDateColumn({ name: 'created_at' })

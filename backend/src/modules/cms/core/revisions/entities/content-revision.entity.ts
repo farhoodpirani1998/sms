@@ -47,7 +47,7 @@ export class ContentRevision {
   @Column({ type: 'jsonb' })
   snapshot: Record<string, unknown>;
 
-  @Column({ name: 'created_by_id', nullable: true })
+  @Column({ name: 'created_by_id', type: 'uuid', nullable: true })
   createdById: string | null;
 
   @CreateDateColumn({ name: 'created_at' })
