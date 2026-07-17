@@ -9,6 +9,7 @@ import { SiteModule } from '../../core/site/site.module';
 import { RevisionsModule } from '../../core/revisions/revisions.module';
 import { PublishingModule } from '../../core/publishing/publishing.module';
 import { OrderingModule } from '../../core/ordering/ordering.module';
+import { PublicApiModule } from '../../core/public-api/public-api.module';
 
 /**
  * `NavigationModule` — CMS-E.2. Same cross-cutting imports every
@@ -17,6 +18,10 @@ import { OrderingModule } from '../../core/ordering/ordering.module';
  * exported — nothing outside this module needs `NavigationService`.
  * Completes CMS-E alongside `SiteSettingsModule` (CMS-E.1), which
  * shares the same migration's other table.
+ *
+ * CMS-I.4 adds `PublicApiModule` so the public controller can
+ * `@UseGuards(PublicSiteContextGuard)`/`@UseInterceptors(PublicCacheInterceptor)`
+ * — Site is now resolved from the `Host` header instead of `?siteId=`.
  */
 @Module({
   imports: [
@@ -25,6 +30,7 @@ import { OrderingModule } from '../../core/ordering/ordering.module';
     RevisionsModule,
     PublishingModule,
     OrderingModule,
+    PublicApiModule,
   ],
   controllers: [NavigationController, NavigationPublicController],
   providers: [NavigationService, LocaleResolverService],

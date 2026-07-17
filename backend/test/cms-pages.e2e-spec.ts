@@ -194,19 +194,19 @@ describe('CMS Pages (CMS-F.1/F.2 e2e)', () => {
         .post(`/api/v1/cms/pages/${published.body.id}/publish?siteId=${site.id}`)
         .set('Authorization', authHeader(app, schoolAdmin));
 
-      const notFound = await request(server).get(
-        `/api/v1/cms/public/pages/does-not-exist?siteId=${site.id}`,
-      );
+      const notFound = await request(server)
+        .get(`/api/v1/cms/public/pages/does-not-exist`)
+        .set('Host', site.domain);
       expect(notFound.status).toBe(404);
 
-      const draftFetch = await request(server).get(
-        `/api/v1/cms/public/pages/draft-page?siteId=${site.id}`,
-      );
+      const draftFetch = await request(server)
+        .get(`/api/v1/cms/public/pages/draft-page`)
+        .set('Host', site.domain);
       expect(draftFetch.status).toBe(404);
 
-      const publicRes = await request(server).get(
-        `/api/v1/cms/public/pages/admissions?siteId=${site.id}`,
-      );
+      const publicRes = await request(server)
+        .get(`/api/v1/cms/public/pages/admissions`)
+        .set('Host', site.domain);
       expect(publicRes.status).toBe(200);
       expect(publicRes.body.id).toBe(published.body.id);
       expect(publicRes.body.title).toBe('Admissions');
@@ -215,9 +215,9 @@ describe('CMS Pages (CMS-F.1/F.2 e2e)', () => {
       expect(publicRes.body.seo.description).toBe('Learn how to apply.');
       expect(publicRes.body.seo.canonicalUrl).toBe(`https://${site.domain}/admissions`);
 
-      const publicResFa = await request(server).get(
-        `/api/v1/cms/public/pages/admissions?siteId=${site.id}&locale=fa`,
-      );
+      const publicResFa = await request(server)
+        .get(`/api/v1/cms/public/pages/admissions?locale=fa`)
+        .set('Host', site.domain);
       expect(publicResFa.body.title).toBe('ثبت‌نام');
 
       expect(draft.body.id).not.toBe(published.body.id);
@@ -233,9 +233,9 @@ describe('CMS Pages (CMS-F.1/F.2 e2e)', () => {
         .post(`/api/v1/cms/pages/${published.body.id}/publish?siteId=${site.id}`)
         .set('Authorization', authHeader(app, schoolAdmin));
 
-      const publicRes = await request(server).get(
-        `/api/v1/cms/public/pages/no-seo?siteId=${site.id}`,
-      );
+      const publicRes = await request(server)
+        .get(`/api/v1/cms/public/pages/no-seo`)
+        .set('Host', site.domain);
 
       expect(publicRes.status).toBe(200);
       // No metaTitle set -> falls back to the Page's own title, not the
@@ -256,9 +256,9 @@ describe('CMS Pages (CMS-F.1/F.2 e2e)', () => {
         .post(`/api/v1/cms/pages/${published.body.id}/publish?siteId=${site.id}`)
         .set('Authorization', authHeader(app, schoolAdmin));
 
-      const otherSiteRes = await request(server).get(
-        `/api/v1/cms/public/pages/shared-slug?siteId=${otherSite.id}`,
-      );
+      const otherSiteRes = await request(server)
+        .get(`/api/v1/cms/public/pages/shared-slug`)
+        .set('Host', otherSite.domain);
       expect(otherSiteRes.status).toBe(404);
     });
   });

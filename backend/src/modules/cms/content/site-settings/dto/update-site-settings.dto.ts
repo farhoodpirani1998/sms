@@ -65,10 +65,7 @@ export class SiteIdQueryDto {
 }
 
 /** `GET /cms/public/site-settings` — public read scope, locale-resolved. */
-export class PublicSiteSettingsQueryDto extends LocaleQueryDto {
-  @IsUUID()
-  siteId: string;
-}
+export class PublicSiteSettingsQueryDto extends LocaleQueryDto {}
 
 /** `POST /cms/site-settings/schedule` body. */
 export class ScheduleSiteSettingsDto {

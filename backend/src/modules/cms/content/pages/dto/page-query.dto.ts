@@ -21,10 +21,7 @@ export class PageListQueryDto extends PaginationQueryDto {
  * file, matching how `PublicStatisticQueryDto` sits in
  * `statistic-query.dto.ts` rather than a separate file.
  */
-export class PublicPageQueryDto extends LocaleQueryDto {
-  @IsUUID()
-  siteId: string;
-}
+export class PublicPageQueryDto extends LocaleQueryDto {}
 
 /** `POST /cms/pages/:id/schedule` body. */
 export class SchedulePageDto {

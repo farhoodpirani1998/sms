@@ -173,9 +173,9 @@ describe('CMS News (CMS-G.1/G.2 e2e)', () => {
         .set('Authorization', authHeader(app, schoolAdmin))
         .send({ siteId: site.id, slug: 'draft-article', title: { en: 'Draft article' } });
 
-      const listRes = await request(server).get(
-        `/api/v1/cms/public/news?siteId=${site.id}&page=1&limit=2`,
-      );
+      const listRes = await request(server)
+        .get(`/api/v1/cms/public/news?page=1&limit=2`)
+        .set('Host', site.domain);
 
       expect(listRes.status).toBe(200);
       expect(listRes.body.total).toBe(3);
@@ -187,9 +187,9 @@ describe('CMS News (CMS-G.1/G.2 e2e)', () => {
       expect(listRes.body.data[0].body).toBeUndefined();
       expect(listRes.body.data.find((a: any) => a.id === draft.id)).toBeUndefined();
 
-      const secondPage = await request(server).get(
-        `/api/v1/cms/public/news?siteId=${site.id}&page=2&limit=2`,
-      );
+      const secondPage = await request(server)
+        .get(`/api/v1/cms/public/news?page=2&limit=2`)
+        .set('Host', site.domain);
       expect(secondPage.body.data).toHaveLength(1);
       expect(secondPage.body.data[0].title).toBe('First article');
     });
@@ -201,9 +201,9 @@ describe('CMS News (CMS-G.1/G.2 e2e)', () => {
         .send({ siteId: site.id, slug: 'site-a-only', title: { en: 'Site A only' } });
       await publish(created.body.id);
 
-      const otherSiteListRes = await request(server).get(
-        `/api/v1/cms/public/news?siteId=${otherSite.id}`,
-      );
+      const otherSiteListRes = await request(server)
+        .get(`/api/v1/cms/public/news`)
+        .set('Host', otherSite.domain);
       expect(otherSiteListRes.status).toBe(200);
       expect(otherSiteListRes.body.data).toHaveLength(0);
     });
@@ -222,9 +222,9 @@ describe('CMS News (CMS-G.1/G.2 e2e)', () => {
         });
       await publish(published.body.id);
 
-      const publicRes = await request(server).get(
-        `/api/v1/cms/public/news/science-fair-2026?siteId=${site.id}`,
-      );
+      const publicRes = await request(server)
+        .get(`/api/v1/cms/public/news/science-fair-2026`)
+        .set('Host', site.domain);
 
       expect(publicRes.status).toBe(200);
       expect(publicRes.body.title).toBe('Science Fair 2026');
@@ -233,9 +233,9 @@ describe('CMS News (CMS-G.1/G.2 e2e)', () => {
         `https://${site.domain}/news/science-fair-2026`,
       );
 
-      const notFound = await request(server).get(
-        `/api/v1/cms/public/news/does-not-exist?siteId=${site.id}`,
-      );
+      const notFound = await request(server)
+        .get(`/api/v1/cms/public/news/does-not-exist`)
+        .set('Host', site.domain);
       expect(notFound.status).toBe(404);
     });
   });

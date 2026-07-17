@@ -20,10 +20,7 @@ export class NavigationItemListQueryDto extends PaginationQueryDto {
 }
 
 /** `GET /cms/public/navigation` — public tree read, locale-resolved. */
-export class PublicNavigationQueryDto extends LocaleQueryDto {
-  @IsUUID()
-  siteId: string;
-}
+export class PublicNavigationQueryDto extends LocaleQueryDto {}
 
 /** `POST /cms/navigation/:id/schedule` body. */
 export class ScheduleNavigationItemDto {

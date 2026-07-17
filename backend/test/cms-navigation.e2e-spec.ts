@@ -183,7 +183,9 @@ describe('CMS Navigation (CMS-E.2 e2e)', () => {
         });
       expect(reorderChildren.status).toBe(201);
 
-      const publicRes = await request(server).get(`/api/v1/cms/public/navigation?siteId=${site.id}`);
+      const publicRes = await request(server)
+        .get(`/api/v1/cms/public/navigation`)
+        .set('Host', site.domain);
 
       expect(publicRes.status).toBe(200);
       expect(publicRes.body).toHaveLength(3);
@@ -247,9 +249,9 @@ describe('CMS Navigation (CMS-E.2 e2e)', () => {
       .post(`/api/v1/cms/navigation/${created.body.id}/publish?siteId=${site.id}`)
       .set('Authorization', authHeader(app, schoolAdmin));
 
-    const otherSitePublicRes = await request(server).get(
-      `/api/v1/cms/public/navigation?siteId=${otherSite.id}`,
-    );
+    const otherSitePublicRes = await request(server)
+      .get(`/api/v1/cms/public/navigation`)
+      .set('Host', otherSite.domain);
 
     expect(otherSitePublicRes.status).toBe(200);
     expect(otherSitePublicRes.body).toEqual([]);

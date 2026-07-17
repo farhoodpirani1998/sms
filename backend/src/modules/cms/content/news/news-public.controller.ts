@@ -1,11 +1,27 @@
-import { Controller, Get, NotFoundException, Param, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  Query,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { NewsService } from './news.service';
 import { PublicNewsListQueryDto, PublicNewsQueryDto } from './dto/news-query.dto';
+import { PublicSiteContextGuard } from '../../core/public-api/guards/public-site-context.guard';
+import { PublicCacheInterceptor } from '../../core/public-api/interceptors/public-cache.interceptor';
+import { PublicSiteContext } from '../../common/decorators/public-site-context.decorator';
+import { Site } from '../../core/site/entities/site.entity';
 
 /**
- * `cms/public/news` — CMS-G.2. Unguarded, uncached public read — same
- * stopgap every public controller since CMS-D uses (`?siteId=` query
- * param until CMS-I's Host-based guard/cache land).
+ * `cms/public/news` — CMS-G.2, wired for CMS-I.4. Site-scoped via
+ * `PublicSiteContextGuard` (Host-header resolution, replacing the old
+ * `?siteId=` query param) and cached by `PublicCacheInterceptor`, same
+ * pairing every CMS-D/E/F public controller got in CMS-I.3/I.4. Both
+ * routes sit under the one guard/interceptor pair at the controller
+ * level — the list route and the by-slug detail route get independent
+ * cache keys since the key is built from the full request path.
  *
  * Two routes: `GET /cms/public/news` (paginated summaries, newest
  * first) and `GET /cms/public/news/:slug` (full detail with resolved
@@ -15,21 +31,27 @@ import { PublicNewsListQueryDto, PublicNewsQueryDto } from './dto/news-query.dto
  * already draws between `findAll`/`findOne`.
  */
 @Controller('cms/public/news')
+@UseGuards(PublicSiteContextGuard)
+@UseInterceptors(PublicCacheInterceptor)
 export class NewsPublicController {
   constructor(private readonly newsService: NewsService) {}
 
   @Get()
-  async findPublished(@Query() query: PublicNewsListQueryDto) {
+  async findPublished(@PublicSiteContext() site: Site, @Query() query: PublicNewsListQueryDto) {
     return this.newsService.findPublishedList(
-      query.siteId,
+      site.id,
       { page: query.page, limit: query.limit },
       query.locale,
     );
   }
 
   @Get(':slug')
-  async findBySlug(@Param('slug') slug: string, @Query() query: PublicNewsQueryDto) {
-    const article = await this.newsService.findPublishedBySlug(query.siteId, slug, query.locale);
+  async findBySlug(
+    @Param('slug') slug: string,
+    @PublicSiteContext() site: Site,
+    @Query() query: PublicNewsQueryDto,
+  ) {
+    const article = await this.newsService.findPublishedBySlug(site.id, slug, query.locale);
     if (!article) {
       throw new NotFoundException('News article not found');
     }

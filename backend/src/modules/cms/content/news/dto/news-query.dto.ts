@@ -23,9 +23,6 @@ export class NewsListQueryDto extends PaginationQueryDto {
  * `LocaleQueryDto` itself uses.
  */
 export class PublicNewsListQueryDto extends PaginationQueryDto {
-  @IsUUID()
-  siteId: string;
-
   @IsOptional()
   @IsString()
   @Length(2, 10)
@@ -34,9 +31,6 @@ export class PublicNewsListQueryDto extends PaginationQueryDto {
 
 /** `GET /cms/public/news/:slug` — public detail scope, locale-resolved. */
 export class PublicNewsQueryDto {
-  @IsUUID()
-  siteId: string;
-
   @IsOptional()
   @IsString()
   @Length(2, 10)
