@@ -146,7 +146,7 @@ export class SiteSettingsService extends BaseContentService<SiteSettings> implem
   }
 
   /**
-   * `GET /cms/public/site-settings` — the singleton row's localized
+   * `GET /public/site-settings` — the singleton row's localized
    * fields, only if `PUBLISHED`. Returns `null` rather than a 404 when
    * nothing's been published yet — a settings block with no published
    * content is a normal, expected state for a brand-new Site, not an

@@ -189,7 +189,7 @@ describe('CMS Teachers (CMS-H.3 e2e)', () => {
       .set('Authorization', authHeader(app, schoolAdmin));
 
     const publicRes = await request(server)
-      .get(`/api/v1/cms/public/teachers`)
+      .get(`/api/v1/public/teachers`)
       .set('Host', site.domain);
 
     expect(publicRes.status).toBe(200);
@@ -203,7 +203,7 @@ describe('CMS Teachers (CMS-H.3 e2e)', () => {
     expect(publicRes.body.find((t: any) => t.id === draft.body.id)).toBeUndefined();
 
     const publicResFa = await request(server)
-      .get(`/api/v1/cms/public/teachers?locale=fa`)
+      .get(`/api/v1/public/teachers?locale=fa`)
       .set('Host', site.domain);
     expect(publicResFa.body[0].role).toBe('معلم پایه سوم');
     expect(publicResFa.body[0].bio).toBe('English bio');
@@ -220,7 +220,7 @@ describe('CMS Teachers (CMS-H.3 e2e)', () => {
       .set('Authorization', authHeader(app, schoolAdmin));
 
     const otherSitePublicRes = await request(server)
-      .get(`/api/v1/cms/public/teachers`)
+      .get(`/api/v1/public/teachers`)
       .set('Host', otherSite.domain);
 
     expect(otherSitePublicRes.status).toBe(200);

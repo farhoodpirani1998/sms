@@ -171,7 +171,7 @@ describe('CMS CTA (CMS-D.3 e2e)', () => {
       .set('Authorization', authHeader(app, schoolAdmin));
 
     const publicRes = await request(server)
-      .get(`/api/v1/cms/public/cta`)
+      .get(`/api/v1/public/cta`)
       .set('Host', site.domain);
 
     expect(publicRes.status).toBe(200);
@@ -184,12 +184,12 @@ describe('CMS CTA (CMS-D.3 e2e)', () => {
     expect(publicRes.body.find((c: any) => c.id === draft.body.id)).toBeUndefined();
 
     const publicResBadLocale = await request(server)
-      .get(`/api/v1/cms/public/cta?locale=de`)
+      .get(`/api/v1/public/cta?locale=de`)
       .set('Host', site.domain);
     expect(publicResBadLocale.body[0].title).toBe('Published cta');
 
     const publicResFa = await request(server)
-      .get(`/api/v1/cms/public/cta?locale=fa`)
+      .get(`/api/v1/public/cta?locale=fa`)
       .set('Host', site.domain);
     expect(publicResFa.body[0].title).toBe('فراخوان منتشر شده');
     expect(publicResFa.body[0].body).toBe('English body');
@@ -206,7 +206,7 @@ describe('CMS CTA (CMS-D.3 e2e)', () => {
       .set('Authorization', authHeader(app, schoolAdmin));
 
     const otherSitePublicRes = await request(server)
-      .get(`/api/v1/cms/public/cta`)
+      .get(`/api/v1/public/cta`)
       .set('Host', otherSite.domain);
 
     expect(otherSitePublicRes.status).toBe(200);

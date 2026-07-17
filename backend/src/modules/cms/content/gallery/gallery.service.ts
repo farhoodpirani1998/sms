@@ -132,7 +132,7 @@ export class GalleryService extends BaseContentService<GalleryItem> implements O
     );
   }
 
-  /** `GET /cms/public/gallery` — every `PUBLISHED` row, ordered, localized, optional `category` filter. */
+  /** `GET /public/gallery` — every `PUBLISHED` row, ordered, localized, optional `category` filter. */
   async findPublished(
     siteId: string,
     requestedLocale?: string,

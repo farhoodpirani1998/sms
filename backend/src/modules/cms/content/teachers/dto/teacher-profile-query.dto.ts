@@ -14,7 +14,7 @@ export class TeacherProfileListQueryDto extends PaginationQueryDto {
   siteId: string;
 }
 
-/** `GET /cms/public/teachers` — public read scope, locale-resolved.
+/** `GET /public/teachers` — public read scope, locale-resolved.
  * `siteId` no longer travels here as of CMS-I.5 — `PublicSiteContextGuard`
  * resolves the Site from the `Host` header (or dev slug fallback) instead. */
 export class PublicTeacherProfileQueryDto extends LocaleQueryDto {}

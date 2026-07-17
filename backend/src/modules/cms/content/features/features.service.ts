@@ -101,7 +101,7 @@ export class FeaturesService extends BaseContentService<Feature> implements OnMo
     );
   }
 
-  /** `GET /cms/public/features` — every `PUBLISHED` row, ordered, localized. */
+  /** `GET /public/features` — every `PUBLISHED` row, ordered, localized. */
   async findPublished(siteId: string, requestedLocale?: string): Promise<PublicFeature[]> {
     const locale = await this.localeResolverService.resolve(siteId, requestedLocale);
     const defaultLocale = await this.localeResolverService.resolve(siteId);

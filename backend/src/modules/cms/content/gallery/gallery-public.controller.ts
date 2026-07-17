@@ -7,7 +7,7 @@ import { PublicSiteContext } from '../../common/decorators/public-site-context.d
 import { Site } from '../../core/site/entities/site.entity';
 
 /**
- * `cms/public/gallery` — CMS-H.1, wired for CMS-I.5. Site-scoped via
+ * `public/gallery` — CMS-H.1, wired for CMS-I.5. Site-scoped via
  * `PublicSiteContextGuard` (Host-header resolution, replacing the old
  * `?siteId=` query param) and cached by `PublicCacheInterceptor`, same
  * pairing every prior CMS-D/E/F/G public controller got in
@@ -17,7 +17,7 @@ import { Site } from '../../core/site/entities/site.entity';
  * does (distinct `category` values get distinct cache entries via the
  * full request path).
  */
-@Controller('cms/public/gallery')
+@Controller('public/gallery')
 @UseGuards(PublicSiteContextGuard)
 @UseInterceptors(PublicCacheInterceptor)
 export class GalleryPublicController {

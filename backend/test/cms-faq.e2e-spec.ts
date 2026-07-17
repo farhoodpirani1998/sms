@@ -179,7 +179,7 @@ describe('CMS FAQ (CMS-D.6 e2e)', () => {
       .set('Authorization', authHeader(app, schoolAdmin));
 
     const publicRes = await request(server)
-      .get(`/api/v1/cms/public/faq`)
+      .get(`/api/v1/public/faq`)
       .set('Host', site.domain);
 
     expect(publicRes.status).toBe(200);
@@ -192,12 +192,12 @@ describe('CMS FAQ (CMS-D.6 e2e)', () => {
     expect(publicRes.body.find((f: any) => f.id === draft.body.id)).toBeUndefined();
 
     const publicResBadLocale = await request(server)
-      .get(`/api/v1/cms/public/faq?locale=de`)
+      .get(`/api/v1/public/faq?locale=de`)
       .set('Host', site.domain);
     expect(publicResBadLocale.body[0].question).toBe('Published faq');
 
     const publicResFa = await request(server)
-      .get(`/api/v1/cms/public/faq?locale=fa`)
+      .get(`/api/v1/public/faq?locale=fa`)
       .set('Host', site.domain);
     expect(publicResFa.body[0].question).toBe('سوال منتشر شده');
     expect(publicResFa.body[0].answer).toBe('English answer');
@@ -214,7 +214,7 @@ describe('CMS FAQ (CMS-D.6 e2e)', () => {
       .set('Authorization', authHeader(app, schoolAdmin));
 
     const otherSitePublicRes = await request(server)
-      .get(`/api/v1/cms/public/faq`)
+      .get(`/api/v1/public/faq`)
       .set('Host', otherSite.domain);
 
     expect(otherSitePublicRes.status).toBe(200);

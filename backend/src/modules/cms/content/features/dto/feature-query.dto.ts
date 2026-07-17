@@ -14,7 +14,7 @@ export class FeatureListQueryDto extends PaginationQueryDto {
   siteId: string;
 }
 
-/** `GET /cms/public/features` — public read scope, locale-resolved. `siteId` no longer
+/** `GET /public/features` — public read scope, locale-resolved. `siteId` no longer
  * travels here as of CMS-I.3 — `PublicSiteContextGuard` resolves the
  * Site from the `Host` header (or dev slug fallback) instead. */
 export class PublicFeatureQueryDto extends LocaleQueryDto {}

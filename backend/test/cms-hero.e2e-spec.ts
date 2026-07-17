@@ -183,7 +183,7 @@ describe('CMS Hero (CMS-D.1 e2e)', () => {
       .set('Authorization', authHeader(app, schoolAdmin));
 
     const publicRes = await request(server)
-      .get(`/api/v1/cms/public/hero`)
+      .get(`/api/v1/public/hero`)
       .set('Host', site.domain);
 
     expect(publicRes.status).toBe(200);
@@ -198,14 +198,14 @@ describe('CMS Hero (CMS-D.1 e2e)', () => {
 
     // Requesting an unsupported locale falls back to the Site's default.
     const publicResBadLocale = await request(server)
-      .get(`/api/v1/cms/public/hero?locale=de`)
+      .get(`/api/v1/public/hero?locale=de`)
       .set('Host', site.domain);
     expect(publicResBadLocale.body[0].title).toBe('Published hero');
 
     // Requesting a supported locale resolves it; a field only entered in
     // English falls back to the default locale rather than returning null.
     const publicResFa = await request(server)
-      .get(`/api/v1/cms/public/hero?locale=fa`)
+      .get(`/api/v1/public/hero?locale=fa`)
       .set('Host', site.domain);
     expect(publicResFa.body[0].title).toBe('قهرمان منتشر شده');
     expect(publicResFa.body[0].subtitle).toBe('English subtitle');
@@ -222,7 +222,7 @@ describe('CMS Hero (CMS-D.1 e2e)', () => {
       .set('Authorization', authHeader(app, schoolAdmin));
 
     const otherSitePublicRes = await request(server)
-      .get(`/api/v1/cms/public/hero`)
+      .get(`/api/v1/public/hero`)
       .set('Host', otherSite.domain);
 
     expect(otherSitePublicRes.status).toBe(200);

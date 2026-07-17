@@ -19,7 +19,7 @@ export class NavigationItemListQueryDto extends PaginationQueryDto {
   siteId: string;
 }
 
-/** `GET /cms/public/navigation` — public tree read, locale-resolved. */
+/** `GET /public/navigation` — public tree read, locale-resolved. */
 export class PublicNavigationQueryDto extends LocaleQueryDto {}
 
 /** `POST /cms/navigation/:id/schedule` body. */

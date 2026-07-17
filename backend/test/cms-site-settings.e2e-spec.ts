@@ -171,7 +171,7 @@ describe('CMS Site Settings (CMS-E.1 e2e)', () => {
 
   it('public endpoint returns null when nothing has been published yet, then the published row once it has', async () => {
     const beforePublish = await request(server)
-      .get(`/api/v1/cms/public/site-settings`)
+      .get(`/api/v1/public/site-settings`)
       .set('Host', site.domain);
     expect(beforePublish.status).toBe(200);
     expect(beforePublish.body).toBeNull();
@@ -190,7 +190,7 @@ describe('CMS Site Settings (CMS-E.1 e2e)', () => {
       .set('Authorization', authHeader(app, schoolAdmin));
 
     const afterPublish = await request(server)
-      .get(`/api/v1/cms/public/site-settings`)
+      .get(`/api/v1/public/site-settings`)
       .set('Host', site.domain);
 
     expect(afterPublish.status).toBe(200);
@@ -199,12 +199,12 @@ describe('CMS Site Settings (CMS-E.1 e2e)', () => {
     expect(afterPublish.body.maintenanceMode).toBe(true);
 
     const afterPublishFa = await request(server)
-      .get(`/api/v1/cms/public/site-settings?locale=fa`)
+      .get(`/api/v1/public/site-settings?locale=fa`)
       .set('Host', site.domain);
     expect(afterPublishFa.body.footerText).toBe('فوتر عمومی');
 
     const otherSitePublicRes = await request(server)
-      .get(`/api/v1/cms/public/site-settings`)
+      .get(`/api/v1/public/site-settings`)
       .set('Host', otherSite.domain);
     expect(otherSitePublicRes.status).toBe(200);
     expect(otherSitePublicRes.body).toBeNull();

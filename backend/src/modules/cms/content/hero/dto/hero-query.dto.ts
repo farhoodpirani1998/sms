@@ -22,7 +22,7 @@ export class HeroListQueryDto extends PaginationQueryDto {
 }
 
 /**
- * `GET /cms/public/hero` — public read scope. `siteId` no longer travels here as of
+ * `GET /public/hero` — public read scope. `siteId` no longer travels here as of
  * CMS-I.3 — `PublicSiteContextGuard` resolves the Site from the `Host`
  * header (or dev slug fallback) instead. `locale` is still optional and
  * resolved against the Site's supported locales by `LocaleResolverService`

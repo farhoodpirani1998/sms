@@ -99,7 +99,7 @@ export class StatisticsService extends BaseContentService<Statistic> implements 
     );
   }
 
-  /** `GET /cms/public/statistics` — every `PUBLISHED` row, ordered, localized. */
+  /** `GET /public/statistics` — every `PUBLISHED` row, ordered, localized. */
   async findPublished(siteId: string, requestedLocale?: string): Promise<PublicStatistic[]> {
     const locale = await this.localeResolverService.resolve(siteId, requestedLocale);
     const defaultLocale = await this.localeResolverService.resolve(siteId);

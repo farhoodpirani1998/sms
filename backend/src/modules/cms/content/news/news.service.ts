@@ -183,7 +183,7 @@ export class NewsService extends BaseContentService<NewsArticle> implements OnMo
   }
 
   /**
-   * `GET /cms/public/news` — CMS-G.2. Paginated, locale-resolved
+   * `GET /public/news` — CMS-G.2. Paginated, locale-resolved
    * summaries of every `PUBLISHED` article for a Site, newest first.
    * Deliberately returns `PublicNewsSummary` (no `body`, no `seo`) —
    * a listing view has no need for either, same "detail carries more
@@ -221,7 +221,7 @@ export class NewsService extends BaseContentService<NewsArticle> implements OnMo
   }
 
   /**
-   * `GET /cms/public/news/:slug` — CMS-G.2. Resolves the published
+   * `GET /public/news/:slug` — CMS-G.2. Resolves the published
    * article at `slug` for this Site, locale-resolved, with
    * `ResolvedSeoMeta` built the same way `PagesService.
    * findPublishedBySlug()` builds it: the article's own `metaTitle`/

@@ -95,7 +95,7 @@ export class CtaService extends BaseContentService<Cta> implements OnModuleInit 
     );
   }
 
-  /** `GET /cms/public/cta` — every `PUBLISHED` row, ordered, localized. */
+  /** `GET /public/cta` — every `PUBLISHED` row, ordered, localized. */
   async findPublished(siteId: string, requestedLocale?: string): Promise<PublicCta[]> {
     const locale = await this.localeResolverService.resolve(siteId, requestedLocale);
     const defaultLocale = await this.localeResolverService.resolve(siteId);

@@ -64,7 +64,7 @@ export class SiteIdQueryDto {
   siteId: string;
 }
 
-/** `GET /cms/public/site-settings` — public read scope, locale-resolved. */
+/** `GET /public/site-settings` — public read scope, locale-resolved. */
 export class PublicSiteSettingsQueryDto extends LocaleQueryDto {}
 
 /** `POST /cms/site-settings/schedule` body. */

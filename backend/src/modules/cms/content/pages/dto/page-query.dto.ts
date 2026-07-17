@@ -15,7 +15,7 @@ export class PageListQueryDto extends PaginationQueryDto {
 }
 
 /**
- * `GET /cms/public/pages/:slug` — public read scope, locale-resolved.
+ * `GET /public/pages/:slug` — public read scope, locale-resolved.
  * Lands in CMS-F.2 alongside `PagesPublicController`; kept here now
  * since it's the natural home next to every other query DTO in this
  * file, matching how `PublicStatisticQueryDto` sits in

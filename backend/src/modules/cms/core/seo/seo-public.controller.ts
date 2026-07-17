@@ -17,7 +17,7 @@ import { Site } from '../site/entities/site.entity';
  * still falls through to a fresh `generate()` call, same as any other
  * public read.
  *
- * Deliberately not nested under `cms/public/` — crawlers expect
+ * Deliberately not nested under `public/` — crawlers expect
  * `/sitemap.xml` and `/robots.txt` at these exact paths (relative to
  * whatever origin `app.setGlobalPrefix('api/v1')` serves them under),
  * not a CMS-specific subpath, so this controller declares no path

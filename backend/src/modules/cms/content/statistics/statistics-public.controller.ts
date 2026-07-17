@@ -7,7 +7,7 @@ import { PublicSiteContext } from '../../common/decorators/public-site-context.d
 import { Site } from '../../core/site/entities/site.entity';
 
 /**
- * `cms/public/statistics` — CMS-D wired for CMS-I.3. Public read
+ * `public/statistics` — CMS-D wired for CMS-I.3. Public read
  * endpoint: every `PUBLISHED` Statistic row for a Site, localized.
  * Deliberately unauthenticated (this is public-facing website content),
  * but now Site-scoped via `PublicSiteContextGuard` (Host-header
@@ -15,7 +15,7 @@ import { Site } from '../../core/site/entities/site.entity';
  * old `?siteId=` query param, and cached by `PublicCacheInterceptor`
  * per the roadmap's CMS-I.2/I.3 pairing.
  */
-@Controller('cms/public/statistics')
+@Controller('public/statistics')
 @UseGuards(PublicSiteContextGuard)
 @UseInterceptors(PublicCacheInterceptor)
 export class StatisticsPublicController {

@@ -184,7 +184,7 @@ describe('CMS Navigation (CMS-E.2 e2e)', () => {
       expect(reorderChildren.status).toBe(201);
 
       const publicRes = await request(server)
-        .get(`/api/v1/cms/public/navigation`)
+        .get(`/api/v1/public/navigation`)
         .set('Host', site.domain);
 
       expect(publicRes.status).toBe(200);
@@ -250,7 +250,7 @@ describe('CMS Navigation (CMS-E.2 e2e)', () => {
       .set('Authorization', authHeader(app, schoolAdmin));
 
     const otherSitePublicRes = await request(server)
-      .get(`/api/v1/cms/public/navigation`)
+      .get(`/api/v1/public/navigation`)
       .set('Host', otherSite.domain);
 
     expect(otherSitePublicRes.status).toBe(200);

@@ -14,7 +14,7 @@ export class NewsListQueryDto extends PaginationQueryDto {
 }
 
 /**
- * `GET /cms/public/news` — CMS-G.2. Public listing scope: site + the
+ * `GET /public/news` — CMS-G.2. Public listing scope: site + the
  * shared paging shape (`PaginationQueryDto`) + `?locale=`. News is the
  * first content type whose public read needs both pagination and
  * locale together — extends `PaginationQueryDto` and adds `locale`
@@ -29,7 +29,7 @@ export class PublicNewsListQueryDto extends PaginationQueryDto {
   locale?: string;
 }
 
-/** `GET /cms/public/news/:slug` — public detail scope, locale-resolved. */
+/** `GET /public/news/:slug` — public detail scope, locale-resolved. */
 export class PublicNewsQueryDto {
   @IsOptional()
   @IsString()

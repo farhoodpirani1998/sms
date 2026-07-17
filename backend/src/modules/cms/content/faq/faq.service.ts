@@ -93,7 +93,7 @@ export class FaqService extends BaseContentService<Faq> implements OnModuleInit 
     );
   }
 
-  /** `GET /cms/public/faq` — every `PUBLISHED` row, ordered, localized. */
+  /** `GET /public/faq` — every `PUBLISHED` row, ordered, localized. */
   async findPublished(siteId: string, requestedLocale?: string): Promise<PublicFaq[]> {
     const locale = await this.localeResolverService.resolve(siteId, requestedLocale);
     const defaultLocale = await this.localeResolverService.resolve(siteId);

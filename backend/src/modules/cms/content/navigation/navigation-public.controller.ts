@@ -7,7 +7,7 @@ import { PublicSiteContext } from '../../common/decorators/public-site-context.d
 import { Site } from '../../core/site/entities/site.entity';
 
 /**
- * `cms/public/navigation` — CMS-E.2, wired for CMS-I.4. Site-scoped via
+ * `public/navigation` — CMS-E.2, wired for CMS-I.4. Site-scoped via
  * `PublicSiteContextGuard` (Host-header resolution, replacing the old
  * `?siteId=` query param) and cached by `PublicCacheInterceptor`, same
  * pairing every CMS-D public controller got in CMS-I.3 — the assembled
@@ -15,7 +15,7 @@ import { Site } from '../../core/site/entities/site.entity';
  * how the guard/interceptor apply; the interceptor caches whatever body
  * the handler returns, tree or not.
  */
-@Controller('cms/public/navigation')
+@Controller('public/navigation')
 @UseGuards(PublicSiteContextGuard)
 @UseInterceptors(PublicCacheInterceptor)
 export class NavigationPublicController {

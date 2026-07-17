@@ -111,7 +111,7 @@ export class TeachersService extends BaseContentService<TeacherProfile> implemen
     );
   }
 
-  /** `GET /cms/public/teachers` — every `PUBLISHED` row, ordered, localized. */
+  /** `GET /public/teachers` — every `PUBLISHED` row, ordered, localized. */
   async findPublished(siteId: string, requestedLocale?: string): Promise<PublicTeacherProfile[]> {
     const locale = await this.localeResolverService.resolve(siteId, requestedLocale);
     const defaultLocale = await this.localeResolverService.resolve(siteId);

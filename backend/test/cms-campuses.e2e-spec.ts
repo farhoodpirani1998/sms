@@ -186,7 +186,7 @@ describe('CMS Campuses (CMS-H.4 e2e)', () => {
       .set('Authorization', authHeader(app, schoolAdmin));
 
     const publicRes = await request(server)
-      .get(`/api/v1/cms/public/campuses`)
+      .get(`/api/v1/public/campuses`)
       .set('Host', site.domain);
 
     expect(publicRes.status).toBe(200);
@@ -199,7 +199,7 @@ describe('CMS Campuses (CMS-H.4 e2e)', () => {
     expect(publicRes.body.find((c: any) => c.id === draft.body.id)).toBeUndefined();
 
     const publicResFa = await request(server)
-      .get(`/api/v1/cms/public/campuses?locale=fa`)
+      .get(`/api/v1/public/campuses?locale=fa`)
       .set('Host', site.domain);
     expect(publicResFa.body[0].name).toBe('کمپوس منتشر شده');
     expect(publicResFa.body[0].description).toBe('English description');
@@ -216,14 +216,14 @@ describe('CMS Campuses (CMS-H.4 e2e)', () => {
       .set('Authorization', authHeader(app, schoolAdmin));
 
     const otherSitePublicRes = await request(server)
-      .get(`/api/v1/cms/public/campuses`)
+      .get(`/api/v1/public/campuses`)
       .set('Host', otherSite.domain);
 
     expect(otherSitePublicRes.status).toBe(200);
     expect(otherSitePublicRes.body).toHaveLength(0);
 
     const unknownHostRes = await request(server)
-      .get(`/api/v1/cms/public/campuses`)
+      .get(`/api/v1/public/campuses`)
       .set('Host', 'no-such-site.example.com');
 
     expect(unknownHostRes.status).toBe(404);

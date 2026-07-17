@@ -195,7 +195,7 @@ export class NavigationService extends BaseContentService<NavigationItem> implem
     return saved;
   }
 
-  /** `GET /cms/public/navigation` — assembled tree of every `PUBLISHED` row. */
+  /** `GET /public/navigation` — assembled tree of every `PUBLISHED` row. */
   async findPublishedTree(siteId: string, requestedLocale?: string): Promise<PublicNavigationItem[]> {
     const locale = await this.localeResolverService.resolve(siteId, requestedLocale);
     const defaultLocale = await this.localeResolverService.resolve(siteId);

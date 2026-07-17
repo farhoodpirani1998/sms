@@ -15,7 +15,7 @@ import { PublicSiteContext } from '../../common/decorators/public-site-context.d
 import { Site } from '../../core/site/entities/site.entity';
 
 /**
- * `cms/public/pages/:slug` — CMS-F.2, wired for CMS-I.4. Site-scoped via
+ * `public/pages/:slug` — CMS-F.2, wired for CMS-I.4. Site-scoped via
  * `PublicSiteContextGuard` (Host-header resolution, replacing the old
  * `?siteId=` query param) and cached by `PublicCacheInterceptor`, same
  * pairing every CMS-D/E public controller got in CMS-I.3/I.4 — the
@@ -25,7 +25,7 @@ import { Site } from '../../core/site/entities/site.entity';
  * Returns the resolved `title`/`excerpt`/`body` plus `ResolvedSeoMeta` a
  * page renderer needs for `<title>`/meta tags/canonical link.
  */
-@Controller('cms/public/pages')
+@Controller('public/pages')
 @UseGuards(PublicSiteContextGuard)
 @UseInterceptors(PublicCacheInterceptor)
 export class PagesPublicController {

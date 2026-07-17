@@ -106,7 +106,7 @@ export class CampusesService extends BaseContentService<Campus> implements OnMod
     );
   }
 
-  /** `GET /cms/public/campuses` — every `PUBLISHED` row, ordered, localized. */
+  /** `GET /public/campuses` — every `PUBLISHED` row, ordered, localized. */
   async findPublished(siteId: string, requestedLocale?: string): Promise<PublicCampus[]> {
     const locale = await this.localeResolverService.resolve(siteId, requestedLocale);
     const defaultLocale = await this.localeResolverService.resolve(siteId);

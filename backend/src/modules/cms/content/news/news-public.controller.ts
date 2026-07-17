@@ -15,7 +15,7 @@ import { PublicSiteContext } from '../../common/decorators/public-site-context.d
 import { Site } from '../../core/site/entities/site.entity';
 
 /**
- * `cms/public/news` — CMS-G.2, wired for CMS-I.4. Site-scoped via
+ * `public/news` — CMS-G.2, wired for CMS-I.4. Site-scoped via
  * `PublicSiteContextGuard` (Host-header resolution, replacing the old
  * `?siteId=` query param) and cached by `PublicCacheInterceptor`, same
  * pairing every CMS-D/E/F public controller got in CMS-I.3/I.4. Both
@@ -23,14 +23,14 @@ import { Site } from '../../core/site/entities/site.entity';
  * level — the list route and the by-slug detail route get independent
  * cache keys since the key is built from the full request path.
  *
- * Two routes: `GET /cms/public/news` (paginated summaries, newest
- * first) and `GET /cms/public/news/:slug` (full detail with resolved
+ * Two routes: `GET /public/news` (paginated summaries, newest
+ * first) and `GET /public/news/:slug` (full detail with resolved
  * `title`/`excerpt`/`body` plus `ResolvedSeoMeta`) — the same
  * list/detail split `PagesPublicController` doesn't need (Pages has no
  * public listing) but every other content type's admin controller
  * already draws between `findAll`/`findOne`.
  */
-@Controller('cms/public/news')
+@Controller('public/news')
 @UseGuards(PublicSiteContextGuard)
 @UseInterceptors(PublicCacheInterceptor)
 export class NewsPublicController {

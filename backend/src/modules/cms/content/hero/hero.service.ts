@@ -116,7 +116,7 @@ export class HeroService extends BaseContentService<Hero> implements OnModuleIni
   }
 
   /**
-   * `GET /cms/public/hero` — every `PUBLISHED` Hero row for the Site,
+   * `GET /public/hero` — every `PUBLISHED` Hero row for the Site,
    * ordered by `sortOrder`, localized to the resolved locale. No
    * pagination (a homepage hero list is small by nature) and no
    * guard/caching yet — those are CMS-I's job (public-site-context

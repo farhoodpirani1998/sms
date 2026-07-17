@@ -105,7 +105,7 @@ export class TestimonialsService extends BaseContentService<Testimonial> impleme
     );
   }
 
-  /** `GET /cms/public/testimonials` — every `PUBLISHED` row, ordered, localized. */
+  /** `GET /public/testimonials` — every `PUBLISHED` row, ordered, localized. */
   async findPublished(siteId: string, requestedLocale?: string): Promise<PublicTestimonial[]> {
     const locale = await this.localeResolverService.resolve(siteId, requestedLocale);
     const defaultLocale = await this.localeResolverService.resolve(siteId);

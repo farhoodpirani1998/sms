@@ -7,7 +7,7 @@ import { PublicSiteContext } from '../../common/decorators/public-site-context.d
 import { Site } from '../../core/site/entities/site.entity';
 
 /**
- * `cms/public/site-settings` — CMS-E.1, wired for CMS-I.4. Site-scoped
+ * `public/site-settings` — CMS-E.1, wired for CMS-I.4. Site-scoped
  * via `PublicSiteContextGuard` (Host-header resolution, replacing the
  * old `?siteId=` query param) and cached by `PublicCacheInterceptor`,
  * same pairing every CMS-D public controller got in CMS-I.3. Unlike the
@@ -15,7 +15,7 @@ import { Site } from '../../core/site/entities/site.entity';
  * with no published settings yet just returns `null` (see
  * `SiteSettingsService.findPublished()`'s doc comment).
  */
-@Controller('cms/public/site-settings')
+@Controller('public/site-settings')
 @UseGuards(PublicSiteContextGuard)
 @UseInterceptors(PublicCacheInterceptor)
 export class SiteSettingsPublicController {

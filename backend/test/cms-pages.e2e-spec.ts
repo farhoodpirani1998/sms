@@ -195,17 +195,17 @@ describe('CMS Pages (CMS-F.1/F.2 e2e)', () => {
         .set('Authorization', authHeader(app, schoolAdmin));
 
       const notFound = await request(server)
-        .get(`/api/v1/cms/public/pages/does-not-exist`)
+        .get(`/api/v1/public/pages/does-not-exist`)
         .set('Host', site.domain);
       expect(notFound.status).toBe(404);
 
       const draftFetch = await request(server)
-        .get(`/api/v1/cms/public/pages/draft-page`)
+        .get(`/api/v1/public/pages/draft-page`)
         .set('Host', site.domain);
       expect(draftFetch.status).toBe(404);
 
       const publicRes = await request(server)
-        .get(`/api/v1/cms/public/pages/admissions`)
+        .get(`/api/v1/public/pages/admissions`)
         .set('Host', site.domain);
       expect(publicRes.status).toBe(200);
       expect(publicRes.body.id).toBe(published.body.id);
@@ -216,7 +216,7 @@ describe('CMS Pages (CMS-F.1/F.2 e2e)', () => {
       expect(publicRes.body.seo.canonicalUrl).toBe(`https://${site.domain}/admissions`);
 
       const publicResFa = await request(server)
-        .get(`/api/v1/cms/public/pages/admissions?locale=fa`)
+        .get(`/api/v1/public/pages/admissions?locale=fa`)
         .set('Host', site.domain);
       expect(publicResFa.body.title).toBe('ثبت‌نام');
 
@@ -234,7 +234,7 @@ describe('CMS Pages (CMS-F.1/F.2 e2e)', () => {
         .set('Authorization', authHeader(app, schoolAdmin));
 
       const publicRes = await request(server)
-        .get(`/api/v1/cms/public/pages/no-seo`)
+        .get(`/api/v1/public/pages/no-seo`)
         .set('Host', site.domain);
 
       expect(publicRes.status).toBe(200);
@@ -257,7 +257,7 @@ describe('CMS Pages (CMS-F.1/F.2 e2e)', () => {
         .set('Authorization', authHeader(app, schoolAdmin));
 
       const otherSiteRes = await request(server)
-        .get(`/api/v1/cms/public/pages/shared-slug`)
+        .get(`/api/v1/public/pages/shared-slug`)
         .set('Host', otherSite.domain);
       expect(otherSiteRes.status).toBe(404);
     });

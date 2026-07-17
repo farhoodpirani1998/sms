@@ -93,7 +93,7 @@ export class AboutService extends BaseContentService<About> implements OnModuleI
     );
   }
 
-  /** `GET /cms/public/about` — every `PUBLISHED` row, ordered, localized. */
+  /** `GET /public/about` — every `PUBLISHED` row, ordered, localized. */
   async findPublished(siteId: string, requestedLocale?: string): Promise<PublicAbout[]> {
     const locale = await this.localeResolverService.resolve(siteId, requestedLocale);
     const defaultLocale = await this.localeResolverService.resolve(siteId);

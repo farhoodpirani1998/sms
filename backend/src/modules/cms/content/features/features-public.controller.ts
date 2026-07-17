@@ -7,7 +7,7 @@ import { PublicSiteContext } from '../../common/decorators/public-site-context.d
 import { Site } from '../../core/site/entities/site.entity';
 
 /**
- * `cms/public/features` — CMS-D wired for CMS-I.3. Public read
+ * `public/features` — CMS-D wired for CMS-I.3. Public read
  * endpoint: every `PUBLISHED` Feature row for a Site, localized.
  * Deliberately unauthenticated (this is public-facing website content),
  * but now Site-scoped via `PublicSiteContextGuard` (Host-header
@@ -15,7 +15,7 @@ import { Site } from '../../core/site/entities/site.entity';
  * old `?siteId=` query param, and cached by `PublicCacheInterceptor`
  * per the roadmap's CMS-I.2/I.3 pairing.
  */
-@Controller('cms/public/features')
+@Controller('public/features')
 @UseGuards(PublicSiteContextGuard)
 @UseInterceptors(PublicCacheInterceptor)
 export class FeaturesPublicController {

@@ -195,7 +195,7 @@ import { PublicApiModule } from './core/public-api/public-api.module';
  * `SeoModule` gains its long-promised `SeoPublicController`, exposing
  * `GET /sitemap.xml`/`GET /robots.txt` — the same guard resolves the
  * Site for these two as for every other public route, even though
- * neither lives under `cms/public/`. Every public CMS endpoint (14
+ * neither lives under `public/`. Every public CMS endpoint (14
  * content types plus sitemap/robots) is now Site-resolved and cached.
  * Per the roadmap, this completes CMS-I and the module as a whole (34/34
  * sub-phases).

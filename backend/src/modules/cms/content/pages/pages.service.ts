@@ -154,7 +154,7 @@ export class PagesService extends BaseContentService<Page> implements OnModuleIn
   }
 
   /**
-   * `GET /cms/public/pages/:slug` — resolves the published Page at
+   * `GET /public/pages/:slug` — resolves the published Page at
    * `slug` for this Site, locale-resolved, with `ResolvedSeoMeta` built
    * from the Page's own SEO fields, falling back to its `title` and
    * then to `Site.seoDefaults` for anything left unset.
