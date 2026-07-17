@@ -98,6 +98,60 @@ Migrations are **never** run automatically on container start
 them explicitly as a one-off step before rolling out a new image, the same
 way `npm run migration:run` works outside Docker.
 
+## CMS module — production readiness
+
+Reviewed ahead of the CMS module going live; no architecture or content
+behavior changed by this review.
+
+**Media storage** (`src/modules/cms/core/media`): `MEDIA_STORAGE_DRIVER`
+picks `local` (default) or `s3` at boot via `storageProviderFactory` — see
+`.env.example` for the full var list. Two things to confirm before
+running the `local` driver in production:
+- `MEDIA_LOCAL_PATH` must point at a persistent, writable volume — a
+  container's ephemeral filesystem loses every upload on redeploy.
+- On more than one app instance (any horizontally-scaled deployment),
+  `MEDIA_LOCAL_PATH` must be a *shared* volume, or uploads written by one
+  instance 404 when read back through another.
+- Nothing in the app currently serves the `/media/{key}` URL
+  `LocalDiskStorageProvider` returns — no static-assets mount exists in
+  `main.ts`. Production must add one (or a reverse-proxy rule pointing at
+  the same volume) for local-stored media to be reachable at all; this is
+  unchanged from the provider's own doc comment, which already calls this
+  an ops/deployment concern outside the CMS module's code.
+
+For the `s3` driver: `S3StorageProvider` talks to real AWS S3 today — the
+URL it returns is hardcoded to
+`https://{bucket}.s3.{region}.amazonaws.com/{key}`, so it only produces a
+working public URL against actual AWS. Recent AWS SDK v3 releases resolve
+a custom endpoint from the standard `AWS_ENDPOINT_URL_S3` (or
+`AWS_ENDPOINT_URL`) environment variable with no app code changes, so an
+S3-compatible backend (MinIO, Cloudflare R2, DigitalOcean Spaces, etc.)
+can likely be pointed at via that env var alone for the actual
+upload/read calls — but the *returned* `url` field would still be wrong
+(it always renders an `amazonaws.com` host regardless of the real
+endpoint). Making that field correct for a non-AWS endpoint needs a small
+code change to `S3StorageProvider` (an injectable base URL / endpoint
+override) — intentionally not made here, since this pass is env/docs
+only. Track it before an S3-compatible (non-AWS) provider goes live.
+
+**Public cache** (`src/modules/cms/core/public-api`): `PUBLIC_CACHE_REDIS`
+is its own `ioredis` connection (separate from the BullMQ connection),
+created by `createPublicCacheRedisClient()`. It reads `REDIS_HOST`/
+`REDIS_PORT`/`REDIS_PASSWORD` straight from `process.env` — the same vars
+already required above, not a separate config surface — so no new env
+var is needed to run it in production; it authenticates automatically
+wherever `REDIS_PASSWORD` is already set. A Redis read/write failure is
+caught and treated as a cache miss/no-op (`PublicCacheInterceptor`'s
+`safeGet`/`safeSet`), so a Redis outage degrades public CMS reads to
+uncached rather than failing them.
+
+TTL is a 60-second constant (`PUBLIC_CACHE_TTL_SECONDS` in
+`public-cache.interceptor.ts`), not env-configurable. That's intentional
+per its own doc comment: it's a backstop for the gap between a write and
+`CacheInvalidationListener` clearing the affected Site's keys, not the
+primary invalidation path, so it's meant to stay short and fixed rather
+than become a tunable. Left unchanged.
+
 ## Production-safe defaults reviewed in this phase
 
 - **`trust proxy`** is enabled in production (`main.ts`) so Express (and

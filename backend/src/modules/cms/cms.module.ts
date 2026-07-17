@@ -4,7 +4,6 @@ import { MediaModule } from './core/media/media.module';
 import { RevisionsModule } from './core/revisions/revisions.module';
 import { PublishingModule } from './core/publishing/publishing.module';
 import { OrderingModule } from './core/ordering/ordering.module';
-import { ProofBlockModule } from './content/_proof/proof-block.module';
 import { HeroModule } from './content/hero/hero.module';
 import { AboutModule } from './content/about/about.module';
 import { CtaModule } from './content/cta/cta.module';
@@ -38,16 +37,21 @@ import { PublicApiModule } from './core/public-api/public-api.module';
  * CMS-C.4 built `PublishingModule`/`OrderingModule` but proved them only
  * in isolation, against fake repositories — neither was imported here
  * yet, since no concrete content table existed to wire them into
- * end-to-end. CMS-C.5 is that end-to-end proof: it imports both here for
- * the first time, alongside `ProofBlockModule` (`content/_proof/`), the
- * disposable content type that exercises the full CRUD → revision
- * snapshot → publish → event → audit pipeline before 14 real content
- * types (CMS-D onward) copy the same shape. `ProofBlockModule` is
- * expected to be removed from this list (and deleted) once it's no
- * longer needed as a reference — left in place for now since removing
- * it isn't itself one of CMS-D.1's listed files, and nothing about it
- * conflicts with `HeroModule` — `PublishingModule`/`OrderingModule`
- * stay regardless, since every real content type needs them too.
+ * end-to-end. CMS-C.5 was that end-to-end proof: it imported both here
+ * for the first time, alongside `ProofBlockModule` (`content/_proof/`),
+ * a disposable content type that exercised the full CRUD → revision
+ * snapshot → publish → event → audit pipeline before any real content
+ * type existed. `ProofBlockModule` was always expected to be removed
+ * once it was no longer needed as a reference (see its own doc
+ * comments) — now that all 14 real content types (CMS-D through CMS-H)
+ * are built and copy the same shape, it has been deleted: the entity,
+ * DTOs, service, controller, and module under `content/_proof/`, this
+ * import/registration, its `cms.proof_blocks` migration (dropped via a
+ * new down-migration rather than editing the original CMS-C.5 one —
+ * see `database/migrations/`), the `cms-proof-block.e2e-spec.ts` e2e
+ * spec, and its entry in `test/setup/test-app.ts`'s `truncateAll`.
+ * `PublishingModule`/`OrderingModule` stay regardless, since every real
+ * content type needs them too.
  *
  * CMS-D.1 adds `HeroModule` (`content/hero/`): the first real,
  * non-disposable content type, and the reference implementation D.2–D.6
@@ -208,7 +212,6 @@ import { PublicApiModule } from './core/public-api/public-api.module';
     RevisionsModule,
     PublishingModule,
     OrderingModule,
-    ProofBlockModule,
     HeroModule,
     AboutModule,
     CtaModule,

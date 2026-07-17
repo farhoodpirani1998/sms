@@ -6,11 +6,12 @@
 // the first entry (MEDIA_ASSET), and every later content sub-phase adds
 // exactly one more as it lands.
 //
-// PROOF_BLOCK (CMS-C.5) is the disposable entry for the throwaway proof
-// entity that exercises the full revisions/publishing/ordering/events
-// stack before any real content type exists. Left in place for as long
-// as the `_proof` module is (see that module's doc comment) — removing
-// it is bundled with deleting `_proof`, not done separately here.
+// PROOF_BLOCK (CMS-C.5) was the disposable entry for the throwaway proof
+// entity that exercised the full revisions/publishing/ordering/events
+// stack before any real content type existed. Removed as part of the
+// CMS handoff cleanup, bundled with deleting the `_proof` module itself
+// (per this comment's original plan) now that 14 real content types
+// exist to serve as the reference instead.
 //
 // HERO (CMS-D.1) is the first entry for a real, non-disposable content
 // type — the reference implementation D.2–D.6 copy. The other five
@@ -60,7 +61,6 @@
 // an enum entry.
 export enum CmsEntityType {
   MEDIA_ASSET = 'media_asset',
-  PROOF_BLOCK = 'proof_block',
   HERO = 'hero',
   ABOUT = 'about',
   CTA = 'cta',

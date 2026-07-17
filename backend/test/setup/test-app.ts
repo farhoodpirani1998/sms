@@ -86,9 +86,12 @@ export async function truncateAll(app: INestApplication): Promise<void> {
     // media_assets first: it FKs to sites, and CASCADE handles the
     // rest, but explicit ordering keeps this list readable top-down.
     //
-    // proof_blocks/content_revisions added for CMS-C.5's e2e spec, the
-    // first to exercise the throwaway ProofBlock entity and the generic
-    // revisions table — both FK to sites, same ordering reasoning.
+    // content_revisions added for CMS-C.5's e2e spec, the first to
+    // exercise the generic revisions table — FKs to sites, same
+    // ordering reasoning. (CMS-C.5 also introduced a throwaway
+    // ProofBlock entity/`cms.proof_blocks` table to prove the pattern;
+    // both were removed once real content types existed to serve as
+    // the reference instead — see cms.module.ts's doc comment.)
     //
     // hero_items added for CMS-D.1's e2e spec — the first real,
     // non-disposable content type. FKs to sites (and, optionally,
@@ -126,7 +129,6 @@ export async function truncateAll(app: INestApplication): Promise<void> {
     'cms.about_items',
     'cms.hero_items',
     'cms.media_assets',
-    'cms.proof_blocks',
     'cms.content_revisions',
     'cms.sites',
     'audit_logs',
