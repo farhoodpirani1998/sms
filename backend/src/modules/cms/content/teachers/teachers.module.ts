@@ -9,6 +9,7 @@ import { SiteModule } from '../../core/site/site.module';
 import { RevisionsModule } from '../../core/revisions/revisions.module';
 import { PublishingModule } from '../../core/publishing/publishing.module';
 import { OrderingModule } from '../../core/ordering/ordering.module';
+import { PublicApiModule } from '../../core/public-api/public-api.module';
 
 /**
  * `TeachersModule` — CMS-H.3. Same cross-cutting imports every content
@@ -17,6 +18,10 @@ import { OrderingModule } from '../../core/ordering/ordering.module';
  * never import, anything from `modules/school`/`modules/teacher` — see
  * `TeacherProfile`'s bounded-context note. Not exported — nothing
  * outside this module needs `TeachersService`.
+ *
+ * CMS-I.5 adds `PublicApiModule` so the public controller can
+ * `@UseGuards(PublicSiteContextGuard)`/`@UseInterceptors(PublicCacheInterceptor)`
+ * — Site is now resolved from the `Host` header instead of `?siteId=`.
  */
 @Module({
   imports: [
@@ -25,6 +30,7 @@ import { OrderingModule } from '../../core/ordering/ordering.module';
     RevisionsModule,
     PublishingModule,
     OrderingModule,
+    PublicApiModule,
   ],
   controllers: [TeachersController, TeachersPublicController],
   providers: [TeachersService, LocaleResolverService],

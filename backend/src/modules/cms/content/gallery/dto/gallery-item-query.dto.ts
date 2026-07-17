@@ -19,11 +19,11 @@ export class GalleryListQueryDto extends PaginationQueryDto {
   category?: string;
 }
 
-/** `GET /cms/public/gallery` — public read scope, locale-resolved, same optional `?category=` filter. */
+/** `GET /cms/public/gallery` — public read scope, locale-resolved, same
+ * optional `?category=` filter. `siteId` no longer travels here as of
+ * CMS-I.5 — `PublicSiteContextGuard` resolves the Site from the `Host`
+ * header (or dev slug fallback) instead. */
 export class PublicGalleryQueryDto extends LocaleQueryDto {
-  @IsUUID()
-  siteId: string;
-
   @IsOptional()
   @IsString()
   @MaxLength(100)

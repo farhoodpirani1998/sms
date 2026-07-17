@@ -1,19 +1,30 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Query, UseGuards, UseInterceptors } from '@nestjs/common';
 import { GalleryService } from './gallery.service';
 import { PublicGalleryQueryDto } from './dto/gallery-item-query.dto';
+import { PublicSiteContextGuard } from '../../core/public-api/guards/public-site-context.guard';
+import { PublicCacheInterceptor } from '../../core/public-api/interceptors/public-cache.interceptor';
+import { PublicSiteContext } from '../../common/decorators/public-site-context.decorator';
+import { Site } from '../../core/site/entities/site.entity';
 
 /**
- * `cms/public/gallery` — CMS-H.1. Unguarded, uncached public read — same
- * stopgap every public controller since CMS-D uses (`?siteId=` query
- * param until CMS-I's Host-based guard/cache land). Optional
- * `?category=` narrows to a single admin-defined grouping.
+ * `cms/public/gallery` — CMS-H.1, wired for CMS-I.5. Site-scoped via
+ * `PublicSiteContextGuard` (Host-header resolution, replacing the old
+ * `?siteId=` query param) and cached by `PublicCacheInterceptor`, same
+ * pairing every prior CMS-D/E/F/G public controller got in
+ * CMS-I.3/I.4. Optional `?category=` still narrows to a single
+ * admin-defined grouping — that filter lives entirely in the query
+ * string, so it composes with the cache key the same way `?locale=`
+ * does (distinct `category` values get distinct cache entries via the
+ * full request path).
  */
 @Controller('cms/public/gallery')
+@UseGuards(PublicSiteContextGuard)
+@UseInterceptors(PublicCacheInterceptor)
 export class GalleryPublicController {
   constructor(private readonly galleryService: GalleryService) {}
 
   @Get()
-  async findPublished(@Query() query: PublicGalleryQueryDto) {
-    return this.galleryService.findPublished(query.siteId, query.locale, query.category);
+  async findPublished(@PublicSiteContext() site: Site, @Query() query: PublicGalleryQueryDto) {
+    return this.galleryService.findPublished(site.id, query.locale, query.category);
   }
 }

@@ -3,9 +3,9 @@ import { SiteService } from '../site/site.service';
 
 /**
  * `RobotsService` — CMS-F.2. Generates a `robots.txt` body for a Site,
- * pointing crawlers at `SitemapService`'s output. Same "plain
- * injectable, no route yet" state as `SitemapService` — `GET
- * /robots.txt` is exposed by `SeoPublicController` in CMS-I.5.
+ * pointing crawlers at `SitemapService`'s output. Wired to `GET
+ * /robots.txt` by `SeoPublicController` (CMS-I.5), same as
+ * `SitemapService`'s own doc comment describes.
  *
  * Honors `Site.seoDefaults.noIndex` (CMS-A.2's `SeoMeta` on the `Site`
  * entity itself, not `ResolvedSeoMeta`) as a whole-Site opt-out —

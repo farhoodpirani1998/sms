@@ -14,11 +14,10 @@ export class TestimonialListQueryDto extends PaginationQueryDto {
   siteId: string;
 }
 
-/** `GET /cms/public/testimonials` — public read scope, locale-resolved. */
-export class PublicTestimonialQueryDto extends LocaleQueryDto {
-  @IsUUID()
-  siteId: string;
-}
+/** `GET /cms/public/testimonials` — public read scope, locale-resolved.
+ * `siteId` no longer travels here as of CMS-I.5 — `PublicSiteContextGuard`
+ * resolves the Site from the `Host` header (or dev slug fallback) instead. */
+export class PublicTestimonialQueryDto extends LocaleQueryDto {}
 
 /** `POST /cms/testimonials/:id/schedule` body. */
 export class ScheduleTestimonialDto {

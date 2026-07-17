@@ -175,8 +175,26 @@ import { PublicApiModule } from './core/public-api/public-api.module';
  * interceptor + listener are all proven in isolation now; wiring them
  * onto the 14 public controllers is CMS-I.3–I.5.
  *
- * The rest of `core/*` (seo, i18n, public-api) lands in CMS-I — every
- * real `content/*` type this module was left open for now exists.
+ * CMS-I.3 wires `PublicSiteContextGuard`/`PublicCacheInterceptor` onto
+ * the six CMS-D public controllers (Hero/About/CTA/Statistics/Features/
+ * FAQ) — each drops its `?siteId=` query param in favor of
+ * `@PublicSiteContext()`.
+ *
+ * CMS-I.4 does the same for Site Settings/Navigation/Pages/News —
+ * Navigation's tree response and Pages'/News' by-slug lookups needed no
+ * special handling; the guard/interceptor pair is agnostic to response
+ * shape and route params alike.
+ *
+ * CMS-I.5 finishes the sweep: Gallery/Testimonials/Teachers/Campuses
+ * get the same guard/interceptor pairing (Gallery's `?category=` filter
+ * composes with the cache key exactly like `?locale=` does), and
+ * `SeoModule` gains its long-promised `SeoPublicController`, exposing
+ * `GET /sitemap.xml`/`GET /robots.txt` — the same guard resolves the
+ * Site for these two as for every other public route, even though
+ * neither lives under `cms/public/`. Every public CMS endpoint (14
+ * content types plus sitemap/robots) is now Site-resolved and cached.
+ * Per the roadmap, this completes CMS-I and the module as a whole (34/34
+ * sub-phases).
  *
  * `CmsModule` must never import `SchoolModule`/`SchoolsModule`, and no
  * CMS provider may inject a School repository or service — that's the

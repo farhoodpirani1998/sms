@@ -187,9 +187,9 @@ describe('CMS Testimonials (CMS-H.2 e2e)', () => {
       .post(`/api/v1/cms/testimonials/${published.body.id}/publish?siteId=${site.id}`)
       .set('Authorization', authHeader(app, schoolAdmin));
 
-    const publicRes = await request(server).get(
-      `/api/v1/cms/public/testimonials?siteId=${site.id}`,
-    );
+    const publicRes = await request(server)
+      .get(`/api/v1/cms/public/testimonials`)
+      .set('Host', site.domain);
 
     expect(publicRes.status).toBe(200);
     expect(publicRes.body).toHaveLength(1);
@@ -202,9 +202,9 @@ describe('CMS Testimonials (CMS-H.2 e2e)', () => {
 
     expect(publicRes.body.find((t: any) => t.id === draft.body.id)).toBeUndefined();
 
-    const publicResFa = await request(server).get(
-      `/api/v1/cms/public/testimonials?siteId=${site.id}&locale=fa`,
-    );
+    const publicResFa = await request(server)
+      .get(`/api/v1/cms/public/testimonials?locale=fa`)
+      .set('Host', site.domain);
     expect(publicResFa.body[0].quote).toBe('نقل قول منتشر شده');
   });
 
@@ -218,9 +218,9 @@ describe('CMS Testimonials (CMS-H.2 e2e)', () => {
       .post(`/api/v1/cms/testimonials/${created.body.id}/publish?siteId=${site.id}`)
       .set('Authorization', authHeader(app, schoolAdmin));
 
-    const otherSitePublicRes = await request(server).get(
-      `/api/v1/cms/public/testimonials?siteId=${otherSite.id}`,
-    );
+    const otherSitePublicRes = await request(server)
+      .get(`/api/v1/cms/public/testimonials`)
+      .set('Host', otherSite.domain);
 
     expect(otherSitePublicRes.status).toBe(200);
     expect(otherSitePublicRes.body).toHaveLength(0);

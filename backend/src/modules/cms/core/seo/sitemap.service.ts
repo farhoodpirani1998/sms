@@ -18,12 +18,11 @@ import { SiteService } from '../site/site.service';
  * `ResolvedSeoMeta.canonicalUrl` from, so the sitemap and the article's
  * own canonical link always agree.
  *
- * Not yet wired to an HTTP route: `GET /sitemap.xml` is exposed by
- * `SeoPublicController` in CMS-I.5, once the Host-based
- * `PublicSiteContextGuard` (CMS-I.1) exists to resolve which Site a
- * bare `/sitemap.xml` request is for. Until then this is a plain
- * injectable other code (and tests) can call directly with an explicit
- * `siteId`.
+ * Wired to `GET /sitemap.xml` by `SeoPublicController` (CMS-I.5), which
+ * resolves the Site via `PublicSiteContextGuard` (CMS-I.1) before
+ * calling `generate()`. Still a plain injectable underneath, so other
+ * code (and tests) can keep calling it directly with an explicit
+ * `siteId`, same as before.
  *
  * Absolute URLs are built from `Site.domain` (CMS-A.2) — the same field
  * `PublicSiteContextGuard` will eventually resolve *from* on the way

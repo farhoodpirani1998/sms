@@ -212,7 +212,9 @@ describe('CMS Gallery (CMS-H.1 e2e)', () => {
       .post(`/api/v1/cms/gallery/${published.body.id}/publish?siteId=${site.id}`)
       .set('Authorization', authHeader(app, schoolAdmin));
 
-    const publicRes = await request(server).get(`/api/v1/cms/public/gallery?siteId=${site.id}`);
+    const publicRes = await request(server)
+      .get(`/api/v1/cms/public/gallery`)
+      .set('Host', site.domain);
 
     expect(publicRes.status).toBe(200);
     expect(publicRes.body).toHaveLength(1);
@@ -223,9 +225,9 @@ describe('CMS Gallery (CMS-H.1 e2e)', () => {
 
     expect(publicRes.body.find((g: any) => g.id === draft.body.id)).toBeUndefined();
 
-    const publicResFa = await request(server).get(
-      `/api/v1/cms/public/gallery?siteId=${site.id}&locale=fa`,
-    );
+    const publicResFa = await request(server)
+      .get(`/api/v1/cms/public/gallery?locale=fa`)
+      .set('Host', site.domain);
     expect(publicResFa.body[0].caption).toBe('روز ورزش');
   });
 
@@ -253,9 +255,9 @@ describe('CMS Gallery (CMS-H.1 e2e)', () => {
       .set('Authorization', authHeader(app, schoolAdmin));
     expect(adminFiltered.body.data.map((g: any) => g.id)).toEqual([sports.body.id]);
 
-    const publicFiltered = await request(server).get(
-      `/api/v1/cms/public/gallery?siteId=${site.id}&category=campus-life`,
-    );
+    const publicFiltered = await request(server)
+      .get(`/api/v1/cms/public/gallery?category=campus-life`)
+      .set('Host', site.domain);
     expect(publicFiltered.body.map((g: any) => g.id)).toEqual([campusLife.body.id]);
   });
 
@@ -270,9 +272,9 @@ describe('CMS Gallery (CMS-H.1 e2e)', () => {
       .post(`/api/v1/cms/gallery/${created.body.id}/publish?siteId=${site.id}`)
       .set('Authorization', authHeader(app, schoolAdmin));
 
-    const otherSitePublicRes = await request(server).get(
-      `/api/v1/cms/public/gallery?siteId=${otherSite.id}`,
-    );
+    const otherSitePublicRes = await request(server)
+      .get(`/api/v1/cms/public/gallery`)
+      .set('Host', otherSite.domain);
 
     expect(otherSitePublicRes.status).toBe(200);
     expect(otherSitePublicRes.body).toHaveLength(0);
