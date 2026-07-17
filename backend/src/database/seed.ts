@@ -2,6 +2,7 @@ import { DataSource } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import * as dotenv from 'dotenv';
 import { User } from '../modules/users/entities/user.entity';
+import { School } from '../modules/schools/entities/school.entity';
 import { Role } from '../common/authorization/roles.enum';
 
 dotenv.config();
@@ -41,7 +42,7 @@ async function seed() {
   const dataSource = new DataSource({
     type: 'postgres',
     url: process.env.DATABASE_URL,
-    entities: [User],
+    entities: [User, School],
   });
   await dataSource.initialize();
 

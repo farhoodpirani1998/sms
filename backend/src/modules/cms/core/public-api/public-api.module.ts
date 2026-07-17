@@ -42,6 +42,6 @@ import { CacheInvalidationListener } from './listeners/cache-invalidation.listen
     PublicCacheInterceptor,
     CacheInvalidationListener,
   ],
-  exports: [PublicSiteContextGuard, PublicCacheInterceptor],
+  exports: [PublicSiteContextGuard, PublicCacheInterceptor, PUBLIC_CACHE_REDIS, LocaleResolverService],
 })
 export class PublicApiModule {}
