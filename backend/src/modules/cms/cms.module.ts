@@ -164,6 +164,17 @@ import { PublicApiModule } from './core/public-api/public-api.module';
  * not yet applied to any public controller; that + `PublicCacheInterceptor`
  * land in CMS-I.2 onward.
  *
+ * CMS-I.2 fills out the rest of `PublicApiModule`: `PublicCacheInterceptor`
+ * (`core/public-api/interceptors/`) caches public GET responses in Redis
+ * keyed `cms:public:{siteId}:{locale}:{route}`, and
+ * `CacheInvalidationListener` (`core/public-api/listeners/`) subscribes
+ * to `CONTENT_PUBLISHED`/`CONTENT_UNPUBLISHED`/`CONTENT_UPDATED` (all
+ * defined since CMS-C.1, emitted since CMS-C.3/C.4) to clear a Site's
+ * cached keys on write. Both share one dedicated ioredis connection
+ * (not BullMQ's) via the module's `PUBLIC_CACHE_REDIS` provider. Guard +
+ * interceptor + listener are all proven in isolation now; wiring them
+ * onto the 14 public controllers is CMS-I.3–I.5.
+ *
  * The rest of `core/*` (seo, i18n, public-api) lands in CMS-I — every
  * real `content/*` type this module was left open for now exists.
  *
