@@ -20,6 +20,7 @@ import { GalleryModule } from './content/gallery/gallery.module';
 import { TestimonialsModule } from './content/testimonials/testimonials.module';
 import { TeachersModule } from './content/teachers/teachers.module';
 import { CampusesModule } from './content/campuses/campuses.module';
+import { PublicApiModule } from './core/public-api/public-api.module';
 
 /**
  * Aggregates every `core/*` and `content/*` CMS sub-module. Imported once
@@ -154,6 +155,15 @@ import { CampusesModule } from './content/campuses/campuses.module';
  * public-API plumbing (Host-based Site resolution, caching) across all
  * of them next.
  *
+ * CMS-I.1 adds `PublicApiModule` (`core/public-api/`): `SiteResolverService`
+ * (CMS-A.3 stub, in `core/site`) is edited in place to implement real
+ * Host-header → `Site.domain` resolution plus a dev-only slug fallback,
+ * and `PublicSiteContextGuard` + `@PublicSiteContext()` wrap that as a
+ * guard/decorator pair that resolves a `Site` and attaches it to the
+ * request. Per the roadmap, this sub-phase stops there — the guard is
+ * not yet applied to any public controller; that + `PublicCacheInterceptor`
+ * land in CMS-I.2 onward.
+ *
  * The rest of `core/*` (seo, i18n, public-api) lands in CMS-I — every
  * real `content/*` type this module was left open for now exists.
  *
@@ -185,6 +195,7 @@ import { CampusesModule } from './content/campuses/campuses.module';
     TestimonialsModule,
     TeachersModule,
     CampusesModule,
+    PublicApiModule,
   ],
 })
 export class CmsModule {}
