@@ -95,6 +95,34 @@ export async function truncateAll(app: INestApplication): Promise<void> {
     // media_assets), so it's truncated before both.
     //
     // about_items added for CMS-D.2's e2e spec — same reasoning.
+    //
+    // cta_items added for CMS-D.3's e2e spec — same reasoning.
+    //
+    // statistics/features/faqs added for the CMS-D.4/D.5/D.6 e2e specs
+    // — same reasoning; features FKs to sites and, optionally,
+    // media_assets, same as hero/about/cta.
+    //
+    // site_settings/navigation_items added for the CMS-E.1/E.2 e2e
+    // specs — same reasoning. navigation_items additionally
+    // self-references via parent_id (ON DELETE CASCADE), which
+    // `TRUNCATE ... CASCADE` already handles regardless of row order.
+    //
+    // pages/news_articles/gallery_items/testimonials/teacher_profiles/
+    // campuses added for the CMS-F.1/F.2/G.1/G.2/H.1/H.2/H.3/H.4 e2e
+    // specs — same reasoning; each FKs to sites (and, where noted
+    // above, optionally media_assets).
+    'cms.cta_items',
+    'cms.statistics',
+    'cms.features',
+    'cms.faqs',
+    'cms.site_settings',
+    'cms.navigation_items',
+    'cms.pages',
+    'cms.news_articles',
+    'cms.gallery_items',
+    'cms.testimonials',
+    'cms.teacher_profiles',
+    'cms.campuses',
     'cms.about_items',
     'cms.hero_items',
     'cms.media_assets',

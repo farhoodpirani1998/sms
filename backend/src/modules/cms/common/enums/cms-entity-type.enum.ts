@@ -46,6 +46,18 @@
 //
 // GALLERY_ITEM (CMS-H.1) — first CMS-H entry. Also the first content
 // type with a required (not optional) MediaAsset reference.
+//
+// TESTIMONIAL (CMS-H.2) — second CMS-H entry, onto the `testimonials`
+// table H.1's migration already created.
+//
+// TEACHER_PROFILE (CMS-H.3) — third CMS-H entry, onto the
+// `teacher_profiles` table H.1's migration already created. A CMS-owned
+// display entity with no relation to the School-domain `Teacher` — see
+// that entity's doc comment.
+//
+// CAMPUS (CMS-H.4) — fourth and last CMS-H entry, onto the `campuses`
+// table H.1's migration already created. All 14 content types now have
+// an enum entry.
 export enum CmsEntityType {
   MEDIA_ASSET = 'media_asset',
   PROOF_BLOCK = 'proof_block',
@@ -60,4 +72,7 @@ export enum CmsEntityType {
   PAGE = 'page',
   NEWS_ARTICLE = 'news_article',
   GALLERY_ITEM = 'gallery_item',
+  TESTIMONIAL = 'testimonial',
+  TEACHER_PROFILE = 'teacher_profile',
+  CAMPUS = 'campus',
 }

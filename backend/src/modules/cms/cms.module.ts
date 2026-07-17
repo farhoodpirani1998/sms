@@ -17,6 +17,9 @@ import { PagesModule } from './content/pages/pages.module';
 import { SeoModule } from './core/seo/seo.module';
 import { NewsModule } from './content/news/news.module';
 import { GalleryModule } from './content/gallery/gallery.module';
+import { TestimonialsModule } from './content/testimonials/testimonials.module';
+import { TeachersModule } from './content/teachers/teachers.module';
+import { CampusesModule } from './content/campuses/campuses.module';
 
 /**
  * Aggregates every `core/*` and `content/*` CMS sub-module. Imported once
@@ -126,11 +129,33 @@ import { GalleryModule } from './content/gallery/gallery.module';
  * relation (every other type's media reference is optional), and both
  * the admin and public controllers take an optional `?category=` filter.
  *
- * The rest of `core/*` (seo, i18n, public-api) and the remaining 12 real
- * `content/*` types land in later phases and get added to this `imports`
- * array as they're built — this module is intentionally left open for
- * that rather than pre-declaring empty placeholder modules for work that
- * hasn't started yet.
+ * CMS-H.2 adds `TestimonialsModule` (`content/testimonials/`) — the
+ * second CMS-H type, copying `GalleryModule`'s shape onto the
+ * `testimonials` table (already created by H.1's migration). Back to an
+ * optional `avatarMediaId` (not required, unlike `GalleryItem.media`),
+ * plus a non-localized `authorName` and an optional 1–5 `rating`.
+ *
+ * CMS-H.3 adds `TeachersModule` (`content/teachers/`) — the third
+ * CMS-H type, onto the `teacher_profiles` table (already created by
+ * H.1's migration). `TeacherProfile` is a CMS-owned display entity for
+ * the public "our teachers" page, deliberately carrying no FK or import
+ * relationship to the School-domain `Teacher` (`modules/teacher`) —
+ * see that entity's doc comment for the bounded-context rationale.
+ * `TeachersModule` imports nothing from `modules/school`/
+ * `modules/teacher`, preserving the same import-boundary lint rule
+ * every other `modules/cms` module already respects.
+ *
+ * CMS-H.4 adds `CampusesModule` (`content/campuses/`) — the fourth and
+ * last CMS-H type, onto the `campuses` table (already created by H.1's
+ * migration). No `MediaAsset` reference at all (unlike Gallery/
+ * Testimonials/Teachers) — see that entity's doc comment. This
+ * completes CMS-H: all 14 content types now exist and are independently
+ * reachable via admin + public controllers. CMS-I wires the shared
+ * public-API plumbing (Host-based Site resolution, caching) across all
+ * of them next.
+ *
+ * The rest of `core/*` (seo, i18n, public-api) lands in CMS-I — every
+ * real `content/*` type this module was left open for now exists.
  *
  * `CmsModule` must never import `SchoolModule`/`SchoolsModule`, and no
  * CMS provider may inject a School repository or service — that's the
@@ -157,6 +182,9 @@ import { GalleryModule } from './content/gallery/gallery.module';
     SeoModule,
     NewsModule,
     GalleryModule,
+    TestimonialsModule,
+    TeachersModule,
+    CampusesModule,
   ],
 })
 export class CmsModule {}
