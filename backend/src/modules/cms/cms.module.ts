@@ -15,6 +15,8 @@ import { SiteSettingsModule } from './content/site-settings/site-settings.module
 import { NavigationModule } from './content/navigation/navigation.module';
 import { PagesModule } from './content/pages/pages.module';
 import { SeoModule } from './core/seo/seo.module';
+import { NewsModule } from './content/news/news.module';
+import { GalleryModule } from './content/gallery/gallery.module';
 
 /**
  * Aggregates every `core/*` and `content/*` CMS sub-module. Imported once
@@ -104,6 +106,26 @@ import { SeoModule } from './core/seo/seo.module';
  * CMS-F; `core/seo/` is ready for News (CMS-G.2) to plug its own table
  * into the same two services.
  *
+ * CMS-G.1 adds `NewsModule` (`content/news/`) — the first CMS-G type,
+ * mirroring `PagesModule`'s admin-CRUD shape (`BaseContentService`/
+ * `PublishingService`/`OrderingService`, slug uniqueness, embedded SEO)
+ * onto its own `news_articles` table. No public controller yet — that,
+ * plus sitemap wiring into `SeoModule`, is CMS-G.2.
+ *
+ * CMS-G.2 adds `NewsPublicController` (paginated listing + by-slug
+ * detail, wired into `NewsModule`) and extends `SeoModule`'s
+ * `SitemapService` to walk published `NewsArticle` rows alongside
+ * `Page` (under `/news/{slug}`). This completes CMS-G. CMS-H (Gallery,
+ * Testimonials, Teachers, Campuses) can begin.
+ *
+ * CMS-H.1 adds `GalleryModule` (`content/gallery/`) — the first CMS-H
+ * type, copying `FeaturesModule`'s (CMS-D.5) admin+public shape onto the
+ * `gallery_items` table (one of four tables this sub-phase's migration
+ * creates; testimonials/teacher_profiles/campuses sit unused until
+ * H.2–H.4). The one shape difference: `GalleryItem.media` is a required
+ * relation (every other type's media reference is optional), and both
+ * the admin and public controllers take an optional `?category=` filter.
+ *
  * The rest of `core/*` (seo, i18n, public-api) and the remaining 12 real
  * `content/*` types land in later phases and get added to this `imports`
  * array as they're built — this module is intentionally left open for
@@ -133,6 +155,8 @@ import { SeoModule } from './core/seo/seo.module';
     NavigationModule,
     PagesModule,
     SeoModule,
+    NewsModule,
+    GalleryModule,
   ],
 })
 export class CmsModule {}

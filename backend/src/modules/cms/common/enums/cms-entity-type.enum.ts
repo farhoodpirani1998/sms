@@ -40,6 +40,12 @@
 //
 // PAGE (CMS-F.1) — first CMS-F entry, and the first content type
 // addressed by a public `slug` rather than only an internal id.
+//
+// NEWS_ARTICLE (CMS-G.1) — first and only CMS-G entry, mirroring PAGE's
+// shape (slug-addressed, embedded SEO) onto its own table.
+//
+// GALLERY_ITEM (CMS-H.1) — first CMS-H entry. Also the first content
+// type with a required (not optional) MediaAsset reference.
 export enum CmsEntityType {
   MEDIA_ASSET = 'media_asset',
   PROOF_BLOCK = 'proof_block',
@@ -52,4 +58,6 @@ export enum CmsEntityType {
   SITE_SETTINGS = 'site_settings',
   NAVIGATION_ITEM = 'navigation_item',
   PAGE = 'page',
+  NEWS_ARTICLE = 'news_article',
+  GALLERY_ITEM = 'gallery_item',
 }
