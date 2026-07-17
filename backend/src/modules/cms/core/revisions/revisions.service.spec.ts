@@ -5,10 +5,16 @@ import { CmsEntityType } from '../../common/enums/cms-entity-type.enum';
 import { CMS_DOMAIN_EVENTS } from '../events/cms-domain-events';
 
 function fakeRepository(rows: ContentRevision[] = []) {
+  // Monotonic offset so two revisions created within the same JS tick
+  // (same millisecond) still get strictly increasing `createdAt` values —
+  // otherwise the DESC sort below is a tie and Array.sort's stability
+  // preserves insertion order instead of reversing it, making the
+  // "most recent first" test flaky.
+  let sequence = 0;
   return {
     create: jest.fn().mockImplementation((data: Partial<ContentRevision>) => ({
       id: `revision-${rows.length + 1}`,
-      createdAt: new Date(),
+      createdAt: new Date(Date.now() + sequence++),
       ...data,
     })),
     save: jest.fn().mockImplementation(async (entity: ContentRevision) => {

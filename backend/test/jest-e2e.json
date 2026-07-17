@@ -6,5 +6,5 @@
     "^.+\\.(t|j)s$": "ts-jest"
   },
   "moduleFileExtensions": ["js", "json", "ts"],
-  "setupFiles": ["<rootDir>/setup/env.ts"]
+  "setupFiles": ["reflect-metadata", "<rootDir>/setup/env.ts"]
 }

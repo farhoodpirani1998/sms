@@ -16,8 +16,9 @@ function fakeEvents() {
 /** Minimal stand-in for a `BaseContentService<T>` subclass instance. */
 function fakeContentService(entity: Record<string, unknown>) {
   return {
-    applyStatusTransition: jest.fn().mockImplementation(async (_siteId, _id, patch) => ({
+    applyStatusTransition: jest.fn().mockImplementation(async (_siteId, id, patch) => ({
       ...entity,
+      id,
       ...patch,
     })),
   } as any;
