@@ -9,7 +9,7 @@ const request_context_1 = require("./request-context");
 class AppLogger {
     constructor() {
         const isProduction = process.env.NODE_ENV === 'production';
-        const level = process.env.LOG_LEVEL ?? (isProduction ? 'info' : 'debug');
+        const level = process.env.LOG_LEVEL || (isProduction ? 'info' : 'debug');
         let transport;
         if (!isProduction) {
             try {

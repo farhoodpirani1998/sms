@@ -37,6 +37,7 @@ const typeorm_1 = require("typeorm");
 const bcrypt = __importStar(require("bcrypt"));
 const dotenv = __importStar(require("dotenv"));
 const user_entity_1 = require("../modules/users/entities/user.entity");
+const school_entity_1 = require("../modules/schools/entities/school.entity");
 const roles_enum_1 = require("../common/authorization/roles.enum");
 dotenv.config();
 const BCRYPT_ROUNDS = 12;
@@ -55,7 +56,7 @@ async function seed() {
     const dataSource = new typeorm_1.DataSource({
         type: 'postgres',
         url: process.env.DATABASE_URL,
-        entities: [user_entity_1.User],
+        entities: [user_entity_1.User, school_entity_1.School],
     });
     await dataSource.initialize();
     const userRepo = dataSource.getRepository(user_entity_1.User);

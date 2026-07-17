@@ -26,7 +26,7 @@ exports.PublicApiModule = PublicApiModule = __decorate([
             public_cache_interceptor_1.PublicCacheInterceptor,
             cache_invalidation_listener_1.CacheInvalidationListener,
         ],
-        exports: [public_site_context_guard_1.PublicSiteContextGuard, public_cache_interceptor_1.PublicCacheInterceptor],
+        exports: [public_site_context_guard_1.PublicSiteContextGuard, public_cache_interceptor_1.PublicCacheInterceptor, public_cache_interceptor_1.PUBLIC_CACHE_REDIS, locale_resolver_service_1.LocaleResolverService],
     })
 ], PublicApiModule);
 //# sourceMappingURL=public-api.module.js.map
